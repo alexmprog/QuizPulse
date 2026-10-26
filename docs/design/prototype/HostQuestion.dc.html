@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — вопрос на большом экране</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 5360px; height: 2564px">
+<h1 class="board-title">Большой экран · вопрос <span>phase = question_open · варианты + картинка, правда/ложь, число, пауза (вопрос скрыт)</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. Choice with image -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 3 / 12</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 20px; padding: 4px 32px 20px; min-height: 0">
+<h2 class="display" style="margin: 0; font-size: 38px; text-align: center; min-height: 92px; display: flex; align-items: center; justify-content: center">{{v.q1}}</h2>
+<div class="row-c" style="justify-content: space-between; gap: 24px; flex: 1">
+<div class="ring" style="--p: 58; width: 150px; height: 150px"><span class="display tnum" style="font-size: 56px">17</span></div>
+<div style="width: 400px; height: 225px; border-radius: 16px; background: var(--surface-2); display: grid; place-items: center; color: var(--muted)" role="img" aria-label="{{v.s.img}}"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M21 16l-5-5-9 8"></path></svg></div>
+<div style="width: 150px; text-align: center"><div class="display tnum" style="font-size: 56px; line-height: 1">9<span class="muted" style="font-size: 32px"> / 14</span></div><div class="muted" style="font-size: 18px; font-weight: 600; margin-top: 6px">{{v.s.answered}}</div></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{v.opts}}" as="o" hint-placeholder-count="4">
+<div class="opt {{o.slot}}" style="height: 88px; font-size: 26px; cursor: default"><span class="shape {{o.shape}}" style="width: 36px; height: 36px"></span>{{o.text}}</div>
+</sc-for>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.quiz}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>{{v.s.pause}}</button>
+</footer>
+</div>
+</div>
+
+<!-- 2. True / false -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 2 / 12</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 24px; padding: 4px 32px 24px; min-height: 0">
+<div class="row-c" style="gap: 32px; flex: 1">
+<div class="ring" style="--p: 85; width: 150px; height: 150px"><span class="display tnum" style="font-size: 56px">17</span></div>
+<h2 class="display" style="margin: 0; font-size: 48px; text-align: center; flex: 1">{{v.q2}}</h2>
+<div style="width: 150px; text-align: center"><div class="display tnum" style="font-size: 56px; line-height: 1">3<span class="muted" style="font-size: 32px"> / 14</span></div><div class="muted" style="font-size: 18px; font-weight: 600; margin-top: 6px">{{v.s.answered}}</div></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<div class="opt opt-b" style="height: 160px; font-size: 40px; justify-content: center; cursor: default"><span class="shape dia" style="width: 48px; height: 48px"></span>{{v.s.tTrue}}</div>
+<div class="opt opt-a" style="height: 160px; font-size: 40px; justify-content: center; cursor: default"><span class="shape tri" style="width: 48px; height: 48px"></span>{{v.s.tFalse}}</div>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.quiz}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>{{v.s.pause}}</button>
+</footer>
+</div>
+</div>
+
+<!-- 3. Numeric -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 4 / 12</span>
+<span class="badge badge-accent" style="height: 32px; font-size: 16px; padding: 0 14px">x2 {{v.s.points}}</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 28px; padding: 4px 32px 28px; min-height: 0">
+<h2 class="display" style="margin: 0; font-size: 44px; text-align: center; min-height: 120px; display: flex; align-items: center; justify-content: center">{{v.q4}}</h2>
+<div class="row-c" style="justify-content: space-between; gap: 32px; flex: 1">
+<div class="ring" style="--p: 30; width: 180px; height: 180px"><span class="display tnum" style="font-size: 64px">6</span></div>
+<div class="card" style="flex: 1; max-width: 560px; height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border-width: 2px">
+<div class="row-c" style="gap: 8px">
+<sc-for list="{{v.digits}}" as="d" hint-placeholder-count="3"><span class="display" style="width: 64px; height: 76px; border-radius: 14px; background: var(--surface-2); display: grid; place-items: center; font-size: 36px; color: var(--muted)">{{d}}</span></sc-for>
+</div>
+<div style="font-size: 24px; font-weight: 600">{{v.s.typeNumber}}</div>
+</div>
+<div style="width: 180px; text-align: center"><div class="display tnum" style="font-size: 56px; line-height: 1">12<span class="muted" style="font-size: 32px"> / 14</span></div><div class="muted" style="font-size: 18px; font-weight: 600; margin-top: 6px">{{v.s.answered}}</div></div>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.quiz}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>{{v.s.pause}}</button>
+</footer>
+</div>
+</div>
+
+<!-- 4. Pause mid-question -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap4}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 3 / 12</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 32px">
+<div style="width: 128px; height: 128px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center"><svg width="56" height="56" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></div>
+<h2 class="display" style="margin: 0; font-size: 72px">{{v.s.paused}}</h2>
+<p style="margin: 0; font-size: 24px; text-align: center; max-width: 820px">{{v.s.pausedSub}}</p>
+<div class="row-c" style="gap: 12px; margin-top: 8px">
+<span class="badge tnum" style="height: 36px; font-size: 17px; padding: 0 16px">{{v.s.left}}</span>
+<span class="badge tnum" style="height: 36px; font-size: 17px; padding: 0 16px">{{v.s.answeredOf}}</span>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.quiz}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-primary btn-xl"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>{{v.s.resume}}</button>
+</footer>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":5360,"height":2564}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'Варианты + картинка', cap2: 'Правда / ложь', cap3: 'Числовой вопрос · x2', cap4: 'Пауза посреди вопроса',
+        q: 'Вопрос', img: 'Картинка к вопросу', answered: 'ответили', points: 'очки',
+        end: 'Завершить досрочно', pause: 'Пауза', resume: 'Продолжить',
+        tTrue: 'Правда', tFalse: 'Ложь', typeNumber: 'Введите число на телефоне',
+        paused: 'Пауза', pausedSub: 'Вопрос скрыт, таймер остановлен. Ответы не принимаются, уже принятые сохранены.',
+        left: 'Останется 17 с', answeredOf: 'Ответили 9 из 14'
+      },
+      en: {
+        cap1: 'Choice + image', cap2: 'True / false', cap3: 'Numeric question · x2', cap4: 'Paused mid-question',
+        q: 'Question', img: 'Question image', answered: 'answered', points: 'points',
+        end: 'End early', pause: 'Pause', resume: 'Resume',
+        tTrue: 'True', tFalse: 'False', typeNumber: 'Type a number on your phone',
+        paused: 'Paused', pausedSub: 'The question is hidden and the timer is stopped. No answers are accepted; those already in are kept.',
+        left: '17 s left after resume', answeredOf: '9 of 14 answered'
+      }
+    };
+    var C = {
+      ru: { quiz: 'Кино 90-х', q1: 'Кто сыграл Нео в «Матрице»?', q2: '«Титаник» получил 11 «Оскаров»', q4: 'Сколько минут длится «Форрест Гамп»?', opts: ['Киану Ривз', 'Брэд Питт', 'Том Круз', 'Джонни Депп'] },
+      en: { quiz: 'Movies of the 90s', q1: 'Who played Neo in The Matrix?', q2: 'Titanic won 11 Oscars', q4: 'How long is Forrest Gump, in minutes?', opts: ['Keanu Reeves', 'Brad Pitt', 'Tom Cruise', 'Johnny Depp'] }
+    };
+    var slots = [['opt-a', 'tri'], ['opt-b', 'dia'], ['opt-c', 'cir'], ['opt-d', 'sq']];
+    var mk = function (cls, lang, label) {
+      var c = C[lang];
+      return {
+        cls: cls, label: label, s: S[lang], quiz: c.quiz, q1: c.q1, q2: c.q2, q4: c.q4, digits: ['?', '?', '?'],
+        opts: c.opts.map(function (t, i) { return { text: t, slot: slots[i][0], shape: slots[i][1] }; })
+      };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+extends:
+  - recommended
+rules:
+  # Repository licensing has not been selected.
+  info-license: off
+  # Local development servers only.
+  no-server-example.com: off
+  # Liveness and CSRF-token issuing have no application-level 4xx response.
+  operation-4xx-response: off

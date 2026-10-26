@@ -1,0 +1,146 @@
+{
+  "packKey": "en-science",
+  "language": "en",
+  "title": "Science & nature",
+  "settings": {
+    "advanceMode": "manual",
+    "autoAdvanceSeconds": 8,
+    "defaultTimeLimitSeconds": 20,
+    "earlyClose": true,
+    "leaderboardEvery": 5
+  },
+  "questions": [
+    {
+      "type": "single_choice",
+      "text": "Which gas do plants absorb from the air for photosynthesis?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Carbon dioxide", "Oxygen", "Nitrogen", "Hydrogen"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "An adult human normally has 46 chromosomes.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Which is the largest planet in the Solar System?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Saturn", "Neptune", "Jupiter", "Earth"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "How many bones does an adult human body have?",
+      "imageId": null,
+      "timeLimitSeconds": 30,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 206,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "What is the hardest naturally occurring substance?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Quartz", "Diamond", "Steel", "Granite"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Lightning never strikes the same place twice.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Which organelle is called the powerhouse of the cell?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Nucleus", "Ribosome", "Golgi apparatus", "Mitochondrion"],
+      "correctOption": 3,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "What is the boiling point of water at sea level, in degrees Celsius?",
+      "imageId": null,
+      "timeLimitSeconds": 20,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 100,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Which element has the atomic number 1?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Hydrogen", "Helium", "Oxygen", "Carbon"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Venus is the hottest planet in the Solar System.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Who developed the theory of general relativity?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 2,
+      "options": ["Isaac Newton", "Albert Einstein", "Niels Bohr", "Galileo Galilei"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "How many planets are there in the Solar System?",
+      "imageId": null,
+      "timeLimitSeconds": 20,
+      "multiplier": 3,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 8,
+      "numericTolerance": 0
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+export const ERROR_CODES = [
+    'INVALID_PAYLOAD',
+    'UNAUTHENTICATED',
+    'FORBIDDEN',
+    'NOT_FOUND',
+    'CSRF_INVALID',
+    'EMAIL_TAKEN',
+    'INVALID_CREDENTIALS',
+    'GAME_NOT_FOUND',
+    'GAME_ALREADY_STARTED',
+    'GAME_FULL',
+    'NICKNAME_TAKEN',
+    'INVALID_TOKEN',
+    'KICKED',
+    'NOT_HOST',
+    'INVALID_PHASE',
+    'PAUSED',
+    'QUESTION_CLOSED',
+    'ALREADY_ANSWERED',
+    'NO_PLAYERS',
+    'ACTIVE_GAME_EXISTS',
+    'RATE_LIMITED',
+    'IMAGE_TOO_LARGE',
+    'IMAGE_TYPE_UNSUPPORTED',
+    'INTERNAL_ERROR',
+] as const;
+
+export type ErrorCode = (typeof ERROR_CODES)[number];

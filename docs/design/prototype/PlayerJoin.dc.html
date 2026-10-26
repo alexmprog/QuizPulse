@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — вход игрока</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 2163px; height: 2684px">
+<h1 class="board-title">Пульт · вход <span>/play?pin=… · PIN, ник, ошибки входа</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. PIN -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span><span class="row-c" style="gap: 6px"><span class="seg seg-sm"><button class="{{v.ruOn}}">RU</button><button class="{{v.enOn}}">EN</button></span><button class="icon-btn" aria-label="{{v.s.theme}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"></path></svg></button></span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px">
+<h1 class="display" style="margin: 0; font-size: 28px">{{v.s.joinTitle}}</h1>
+<label class="field"><span class="label">{{v.s.pin}}</span><input class="input input-lg focus tnum" inputmode="numeric" value="482 913" style="letter-spacing: .12em"><span class="hint">{{v.s.pinHint}}</span></label>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.next}}</button>
+</div>
+</div>
+</div>
+
+<!-- 2. Nickname -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span><span class="row-c" style="gap: 6px"><span class="seg seg-sm"><button class="{{v.ruOn}}">RU</button><button class="{{v.enOn}}">EN</button></span><button class="icon-btn" aria-label="{{v.s.theme}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"></path></svg></button></span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px">
+<div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 2px"><span class="muted" style="font-size: 13px">{{v.s.game}} · PIN 482 913</span><span style="font-size: 18px; font-weight: 700">{{v.quiz}}</span></div>
+<label class="field"><span class="label">{{v.s.nick}}</span><input class="input focus" value="{{v.nick}}" style="height: 56px; font-size: 20px; font-weight: 600"><span class="row-c" style="justify-content: space-between"><span class="hint">{{v.s.nickHint}}</span><span class="hint tnum">{{v.nickLen}} / 20</span></span></label>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.enter}}</button>
+</div>
+</div>
+</div>
+
+<!-- 3. Nickname taken -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span><span class="row-c" style="gap: 6px"><span class="seg seg-sm"><button class="{{v.ruOn}}">RU</button><button class="{{v.enOn}}">EN</button></span><button class="icon-btn" aria-label="{{v.s.theme}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"></path></svg></button></span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px">
+<div class="card" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 2px"><span class="muted" style="font-size: 13px">{{v.s.game}} · PIN 482 913</span><span style="font-size: 18px; font-weight: 700">{{v.quiz}}</span></div>
+<label class="field"><span class="label">{{v.s.nick}}</span><input class="input invalid" value="{{v.taken}}" style="height: 56px; font-size: 20px; font-weight: 600"><span class="err">{{v.s.takenErr}}</span></label>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.enter}}</button>
+</div>
+</div>
+</div>
+
+<!-- 4. Game already started -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap4}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 16px">
+<div style="width: 88px; height: 88px; border-radius: 50%; background: var(--warning-soft); color: var(--warning); display: grid; place-items: center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 26px">{{v.s.startedTitle}}</h1>
+<p class="muted" style="margin: 0; font-size: 16px">{{v.s.startedBody}}</p>
+</div>
+<button class="btn btn-ghost btn-lg btn-block">{{v.s.otherPin}}</button>
+</div>
+</div>
+
+<!-- 5. Game full -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap5}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 16px">
+<div style="width: 88px; height: 88px; border-radius: 50%; background: var(--danger-soft); color: var(--danger); display: grid; place-items: center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20a6 6 0 0 1 12 0M16 4a3.5 3.5 0 0 1 0 7M21 20a6 6 0 0 0-3.5-5.5"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 26px">{{v.s.fullTitle}}</h1>
+<p class="muted" style="margin: 0; font-size: 16px">{{v.s.fullBody}}</p>
+</div>
+<button class="btn btn-ghost btn-lg btn-block">{{v.s.otherPin}}</button>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2163,"height":2684}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'PIN', cap2: 'Ник (PIN из QR)', cap3: 'Ошибка: ник занят', cap4: 'Ошибка: игра началась', cap5: 'Ошибка: игра заполнена',
+        theme: 'Сменить тему', joinTitle: 'Вход в игру', pin: 'PIN игры', pinHint: 'Шесть цифр с экрана ведущего', next: 'Дальше',
+        game: 'Игра', nick: 'Ник или название команды', nickHint: 'Его увидят все на экране', enter: 'Войти',
+        takenErr: 'Ник «Кот» уже занят в этой игре. Выберите другой.',
+        startedTitle: 'Игра уже началась', startedBody: 'Новые игроки не могут присоединиться. Если вы уже играли с этого телефона, откройте ту же ссылку — мы вернём вас на место.',
+        fullTitle: 'Мест нет', fullBody: 'В игре уже 50 игроков — это максимум. Попросите ведущего начать новую.',
+        otherPin: 'Ввести другой PIN'
+      },
+      en: {
+        cap1: 'PIN', cap2: 'Nickname (PIN from QR)', cap3: 'Error: nickname taken', cap4: 'Error: game started', cap5: 'Error: game full',
+        theme: 'Switch theme', joinTitle: 'Join a game', pin: 'Game PIN', pinHint: 'Six digits from the host screen', next: 'Next',
+        game: 'Game', nick: 'Nickname or team name', nickHint: 'Everyone will see it on the screen', enter: 'Join',
+        takenErr: 'The nickname “Cat” is already taken in this game. Pick another one.',
+        startedTitle: 'The game has started', startedBody: 'New players can’t join. If you were already playing on this phone, open the same link and we’ll put you back in your seat.',
+        fullTitle: 'No seats left', fullBody: 'This game already has 50 players, the maximum. Ask the host to start a new one.',
+        otherPin: 'Enter another PIN'
+      }
+    };
+    var mk = function (cls, lang, label) {
+      var en = lang === 'en';
+      var nick = en ? 'Whiskers' : 'Мурзик';
+      return { cls: cls, label: label, s: S[lang], ruOn: en ? '' : 'on', enOn: en ? 'on' : '', quiz: en ? 'Movies of the 90s' : 'Кино 90-х', nick: nick, nickLen: nick.length, taken: en ? 'Cat' : 'Кот' };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

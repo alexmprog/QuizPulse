@@ -1,0 +1,980 @@
+openapi: 3.1.0
+info:
+  title: QuizPulse REST API
+  version: 1.0.0
+  description: |
+    Canonical REST contract of the QuizPulse backend (host accounts, quiz studio, built-in packs, images,
+    game creation and history). The real-time game protocol is Socket.io and lives in `packages/protocol`
+    (documented for other clients in `asyncapi.yaml`).
+
+    Authentication is an HttpOnly session cookie `qp_session`. Every state-changing request must also send
+    the `X-CSRF-Token` header with the token obtained from `GET /api/v1/auth/csrf`.
+    Errors are returned as `{ code }` where `code` is an `ErrorCode`; the web client localizes the text.
+servers:
+  - url: http://localhost:3000
+    description: Local development
+tags:
+  - name: system
+    description: Process liveness.
+  - name: auth
+    description: Host accounts, sessions and CSRF.
+  - name: quizzes
+    description: Quiz studio, own quizzes.
+  - name: packs
+    description: Built-in read-only quiz packs.
+  - name: images
+    description: Question images.
+  - name: games
+    description: Create a game and find the active one.
+  - name: history
+    description: Finished games of the host.
+security:
+  - sessionCookie: []
+paths:
+  /healthz:
+    get:
+      tags: [system]
+      operationId: getHealth
+      summary: Process liveness (outside the /api/v1 prefix)
+      security: []
+      responses:
+        '200':
+          description: The process is alive.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:
+                    type: string
+                    const: ok
+  /api/v1/auth/csrf:
+    get:
+      tags: [auth]
+      operationId: getCsrfToken
+      summary: Issue a CSRF token and set the CSRF cookie
+      security: []
+      responses:
+        '200':
+          description: Token to echo in the `X-CSRF-Token` header of state-changing requests.
+          headers:
+            Set-Cookie:
+              description: The CSRF cookie (`qp_csrf`, HttpOnly, SameSite=Lax) paired with the returned token.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [token]
+                properties:
+                  token:
+                    type: string
+  /api/v1/auth/register:
+    post:
+      tags: [auth]
+      operationId: register
+      summary: Register a host and log in immediately
+      security:
+        - csrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '201':
+          description: Account created; the session cookie is set.
+          headers:
+            X-CSRF-Token:
+              description: >-
+                Rotated CSRF token. The session id changes on login, so the token obtained before is no longer
+                valid; use this one for subsequent state-changing requests.
+              schema:
+                type: string
+            Set-Cookie:
+              description: The `qp_session` session cookie and the rotated `qp_csrf` CSRF cookie.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: The email is already registered (`EMAIL_TAKEN`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/auth/login:
+    post:
+      tags: [auth]
+      operationId: login
+      summary: Log in with email and password
+      security:
+        - csrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: Logged in; the session cookie is set.
+          headers:
+            X-CSRF-Token:
+              description: >-
+                Rotated CSRF token. The session id changes on login, so the token obtained before is no longer
+                valid; use this one for subsequent state-changing requests.
+              schema:
+                type: string
+            Set-Cookie:
+              description: The `qp_session` session cookie and the rotated `qp_csrf` CSRF cookie.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          description: Wrong email or password (`INVALID_CREDENTIALS`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v1/auth/logout:
+    post:
+      tags: [auth]
+      operationId: logout
+      summary: Destroy the current session
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      responses:
+        '204':
+          description: Logged out.
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v1/auth/me:
+    get:
+      tags: [auth]
+      operationId: getMe
+      summary: Current host
+      responses:
+        '200':
+          description: The authenticated host.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+  /api/v1/quizzes:
+    get:
+      tags: [quizzes]
+      operationId: listQuizzes
+      summary: List own quizzes
+      responses:
+        '200':
+          description: Own quizzes, most recently updated first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuizSummary'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+    post:
+      tags: [quizzes]
+      operationId: createQuiz
+      summary: Create a quiz
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizInput'
+      responses:
+        '201':
+          description: The created quiz.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v1/quizzes/{id}:
+    parameters:
+      - $ref: '#/components/parameters/QuizId'
+    get:
+      tags: [quizzes]
+      operationId: getQuiz
+      summary: Get an own quiz with all questions
+      responses:
+        '200':
+          description: The quiz.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [quizzes]
+      operationId: replaceQuiz
+      summary: Replace an own quiz (settings and the whole question list)
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizInput'
+      responses:
+        '200':
+          description: The updated quiz.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [quizzes]
+      operationId: deleteQuiz
+      summary: Delete an own quiz (past games keep their snapshot)
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      responses:
+        '204':
+          description: Deleted.
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/packs:
+    get:
+      tags: [packs]
+      operationId: listPacks
+      summary: List built-in packs
+      parameters:
+        - name: language
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Language'
+      responses:
+        '200':
+          description: Built-in packs, read-only for every host.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuizSummary'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+  /api/v1/packs/{id}:
+    parameters:
+      - $ref: '#/components/parameters/QuizId'
+    get:
+      tags: [packs]
+      operationId: getPack
+      summary: Get a built-in pack with all questions
+      responses:
+        '200':
+          description: The pack.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/packs/{id}/copy:
+    parameters:
+      - $ref: '#/components/parameters/QuizId'
+    post:
+      tags: [packs]
+      operationId: copyPack
+      summary: Copy a built-in pack into the host's studio
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      responses:
+        '201':
+          description: The new editable quiz owned by the host.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/images:
+    post:
+      tags: [images]
+      operationId: uploadImage
+      summary: Upload a question image (JPEG, PNG or WebP, up to 5 MiB)
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  contentMediaType: application/octet-stream
+                  format: binary
+                  description: The image file (`image/jpeg`, `image/png` or `image/webp`).
+      responses:
+        '201':
+          description: Image stored.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageCreated'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '413':
+          description: The file is larger than 5 MiB (`IMAGE_TOO_LARGE`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '415':
+          description: The file is not JPEG, PNG or WebP (`IMAGE_TYPE_UNSUPPORTED`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/images/{id}:
+    get:
+      tags: [images]
+      operationId: getImage
+      summary: Download an image (public, addressed by its unguessable UUID)
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The image bytes.
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                contentMediaType: image/jpeg
+                format: binary
+            image/png:
+              schema:
+                type: string
+                contentMediaType: image/png
+                format: binary
+            image/webp:
+              schema:
+                type: string
+                contentMediaType: image/webp
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/games:
+    post:
+      tags: [games]
+      operationId: createGame
+      summary: Create a game from an own quiz or a built-in pack
+      security:
+        - sessionCookie: []
+          csrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quizId]
+              properties:
+                quizId:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: The game lobby was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameCreated'
+        '400':
+          $ref: '#/components/responses/InvalidPayload'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: The host already has an active game (`ACTIVE_GAME_EXISTS`); `gameId` identifies it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: ACTIVE_GAME_EXISTS
+                gameId: 6b1f5a2e-3c1d-4d6e-9a51-0d6e2b7f8a10
+  /api/v1/games/active:
+    get:
+      tags: [games]
+      operationId: getActiveGame
+      summary: The host's active game, if any
+      responses:
+        '200':
+          description: The active game.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameCreated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/history:
+    get:
+      tags: [history]
+      operationId: listHistory
+      summary: Finished games of the host
+      responses:
+        '200':
+          description: Completed and aborted games, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameSummary'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+  /api/v1/history/{gameId}:
+    get:
+      tags: [history]
+      operationId: getHistoryGame
+      summary: Players, final places and per-question answers of a finished game
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The game details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameDetail'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: qp_session
+      description: HttpOnly session cookie set by register and login.
+    csrfHeader:
+      type: apiKey
+      in: header
+      name: X-CSRF-Token
+      description: Token from `GET /api/v1/auth/csrf`; required on every state-changing request.
+  parameters:
+    QuizId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    InvalidPayload:
+      description: The request body or query is invalid (`INVALID_PAYLOAD`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthenticated:
+      description: No valid session (`UNAUTHENTICATED`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Missing or wrong CSRF token (`CSRF_INVALID`) or action not allowed (`FORBIDDEN`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The resource does not exist or belongs to someone else (`NOT_FOUND`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    ErrorCode:
+      type: string
+      enum:
+        - INVALID_PAYLOAD
+        - UNAUTHENTICATED
+        - FORBIDDEN
+        - NOT_FOUND
+        - CSRF_INVALID
+        - EMAIL_TAKEN
+        - INVALID_CREDENTIALS
+        - GAME_NOT_FOUND
+        - GAME_ALREADY_STARTED
+        - GAME_FULL
+        - NICKNAME_TAKEN
+        - INVALID_TOKEN
+        - KICKED
+        - NOT_HOST
+        - INVALID_PHASE
+        - PAUSED
+        - QUESTION_CLOSED
+        - ALREADY_ANSWERED
+        - NO_PLAYERS
+        - ACTIVE_GAME_EXISTS
+        - RATE_LIMITED
+        - IMAGE_TOO_LARGE
+        - IMAGE_TYPE_UNSUPPORTED
+        - INTERNAL_ERROR
+    Error:
+      type: object
+      required: [code]
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        gameId:
+          type: string
+          format: uuid
+          description: Present with `ACTIVE_GAME_EXISTS`.
+    Language:
+      type: string
+      enum: [ru, en]
+    Credentials:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+          maxLength: 128
+    Me:
+      type: object
+      required: [id, email]
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+    QuizSettings:
+      type: object
+      required: [advanceMode, autoAdvanceSeconds, defaultTimeLimitSeconds, earlyClose, leaderboardEvery]
+      properties:
+        advanceMode:
+          type: string
+          enum: [manual, auto]
+        autoAdvanceSeconds:
+          type: integer
+          minimum: 3
+          maximum: 60
+          default: 8
+        defaultTimeLimitSeconds:
+          type: integer
+          minimum: 5
+          maximum: 120
+          default: 20
+        earlyClose:
+          type: boolean
+          description: Close the question as soon as every connected player has answered.
+        leaderboardEvery:
+          type: integer
+          minimum: 0
+          maximum: 50
+          default: 5
+          description: Show the leaderboard every N questions; 0 means only at the end.
+    QuestionInput:
+      type: object
+      description: |
+        `single_choice` needs 2-4 `options` and `correctOption` inside them; `true_false` has no options and
+        `correctOption` 0 (true) or 1 (false); `numeric` has no options and needs `numericAnswer` and
+        `numericTolerance`.
+      required:
+        - type
+        - text
+        - imageId
+        - timeLimitSeconds
+        - multiplier
+        - options
+        - correctOption
+        - numericAnswer
+        - numericTolerance
+      properties:
+        type:
+          type: string
+          enum: [single_choice, true_false, numeric]
+        text:
+          type: string
+          minLength: 1
+          maxLength: 300
+          pattern: '\S'
+          description: Must contain a non-whitespace character; leading and trailing whitespace is trimmed on save.
+        imageId:
+          type: [string, 'null']
+          minLength: 1
+          description: Id returned by `POST /api/v1/images`.
+        timeLimitSeconds:
+          type: [integer, 'null']
+          minimum: 5
+          maximum: 120
+          description: Null means the quiz default.
+        multiplier:
+          type: integer
+          enum: [1, 2, 3]
+        options:
+          type: array
+          maxItems: 4
+          items:
+            type: string
+            minLength: 1
+            maxLength: 80
+            pattern: '\S'
+            description: Must contain a non-whitespace character; leading and trailing whitespace is trimmed on save.
+        correctOption:
+          type: [integer, 'null']
+          minimum: 0
+        numericAnswer:
+          type: [number, 'null']
+        numericTolerance:
+          type: [number, 'null']
+          minimum: 0
+    Question:
+      allOf:
+        - $ref: '#/components/schemas/QuestionInput'
+        - type: object
+          required: [id, position]
+          properties:
+            id:
+              type: string
+              format: uuid
+            position:
+              type: integer
+              minimum: 0
+    QuizInput:
+      type: object
+      required: [title, language, settings, questions]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 120
+          pattern: '\S'
+          description: Must contain a non-whitespace character; leading and trailing whitespace is trimmed on save.
+        language:
+          $ref: '#/components/schemas/Language'
+        settings:
+          $ref: '#/components/schemas/QuizSettings'
+        questions:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/QuestionInput'
+    Quiz:
+      type: object
+      required: [id, title, language, settings, questions, isPack, packKey, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        language:
+          $ref: '#/components/schemas/Language'
+        settings:
+          $ref: '#/components/schemas/QuizSettings'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        isPack:
+          type: boolean
+        packKey:
+          type: [string, 'null']
+          description: Stable seed key of a built-in pack; null for host quizzes.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    QuizSummary:
+      type: object
+      required: [id, title, language, questionCount, isPack, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        language:
+          $ref: '#/components/schemas/Language'
+        questionCount:
+          type: integer
+          minimum: 0
+        isPack:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+    ImageCreated:
+      type: object
+      required: [id, url]
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          description: Always `/api/v1/images/{id}`.
+    GameCreated:
+      type: object
+      required: [gameId, pin, joinUrl]
+      properties:
+        gameId:
+          type: string
+          format: uuid
+        pin:
+          type: string
+          pattern: '^\d{6}$'
+        joinUrl:
+          type: string
+          description: '`<PUBLIC_BASE_URL>/play?pin=<pin>`, the address encoded in the QR code.'
+    GameStatus:
+      type: string
+      enum: [completed, aborted]
+    GameSummary:
+      type: object
+      required: [gameId, quizTitle, status, startedAt, endedAt, playerCount, winner]
+      properties:
+        gameId:
+          type: string
+          format: uuid
+        quizTitle:
+          type: string
+          description: Title at the time of the game (the quiz may have been renamed or deleted since).
+        status:
+          $ref: '#/components/schemas/GameStatus'
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+        playerCount:
+          type: integer
+          minimum: 0
+        winner:
+          anyOf:
+            - $ref: '#/components/schemas/Winner'
+            - type: 'null'
+    Winner:
+      type: object
+      required: [nickname, score]
+      properties:
+        nickname:
+          type: string
+        score:
+          type: integer
+    HistoryPlayer:
+      type: object
+      required: [playerId, nickname, finalScore, finalRank]
+      properties:
+        playerId:
+          type: string
+        nickname:
+          type: string
+        finalScore:
+          type: integer
+        finalRank:
+          type: integer
+          minimum: 1
+    OptionAnswer:
+      type: object
+      required: [kind, option]
+      properties:
+        kind:
+          type: string
+          const: option
+        option:
+          type: integer
+          minimum: 0
+          maximum: 3
+    NumericAnswer:
+      type: object
+      required: [kind, value]
+      properties:
+        kind:
+          type: string
+          const: numeric
+        value:
+          type: number
+    PlayerAnswer:
+      oneOf:
+        - $ref: '#/components/schemas/OptionAnswer'
+        - $ref: '#/components/schemas/NumericAnswer'
+      discriminator:
+        propertyName: kind
+        mapping:
+          option: '#/components/schemas/OptionAnswer'
+          numeric: '#/components/schemas/NumericAnswer'
+    HistoryAnswer:
+      type: object
+      required: [playerId, answer, activeMs, points, correct]
+      properties:
+        playerId:
+          type: string
+        answer:
+          $ref: '#/components/schemas/PlayerAnswer'
+        activeMs:
+          type: integer
+          minimum: 0
+          description: Active time (pauses excluded) between question open and the answer.
+        points:
+          type: integer
+          minimum: 0
+        correct:
+          type: boolean
+    HistoryQuestion:
+      type: object
+      description: A question from the game's quiz snapshot with the answers players gave. Players who did not answer have no entry.
+      required:
+        - position
+        - type
+        - text
+        - options
+        - correctOption
+        - numericAnswer
+        - numericTolerance
+        - multiplier
+        - answers
+      properties:
+        position:
+          type: integer
+          minimum: 0
+        type:
+          type: string
+          enum: [single_choice, true_false, numeric]
+        text:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctOption:
+          type: [integer, 'null']
+        numericAnswer:
+          type: [number, 'null']
+        numericTolerance:
+          type: [number, 'null']
+        multiplier:
+          type: integer
+          enum: [1, 2, 3]
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryAnswer'
+    GameDetail:
+      type: object
+      required: [gameId, quizTitle, status, startedAt, endedAt, players, questions]
+      properties:
+        gameId:
+          type: string
+          format: uuid
+        quizTitle:
+          type: string
+        status:
+          $ref: '#/components/schemas/GameStatus'
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryPlayer'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoryQuestion'

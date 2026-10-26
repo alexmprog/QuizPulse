@@ -1,0 +1,125 @@
+name: quizpulse
+
+# Local infrastructure. Datastores bind to 127.0.0.1 only (Redis holds the running game's answers);
+# the api (and later web) listens on 0.0.0.0 so phones on the home network can reach it.
+services:
+  postgres:
+    image: postgres:17.11
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-quizpulse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quizpulse-local-only}
+      POSTGRES_DB: ${POSTGRES_DB:-quizpulse}
+    ports: ['127.0.0.1:15432:5432']
+    volumes:
+      - quizpulse_postgres-data:/var/lib/postgresql/data
+    # Datastores restart with Docker like api/web do; otherwise api crash-loops after a Docker restart.
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4.11
+    ports: ['127.0.0.1:16379:6379']
+    volumes:
+      - quizpulse_redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  # minio/minio is no longer published on Docker Hub or Quay, so the Chainguard build is used, pinned by digest.
+  minio:
+    image: chainguard/minio@sha256:d88920d6a50bd0b088223b688be3b76c63e6205dbe494437f67ba1240ea12880
+    command: [server, /data, --address, ':9000', --console-address, ':9001']
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:-quizpulse-local}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-quizpulse-local-only}
+    ports:
+      - '127.0.0.1:19000:9000'
+      - '127.0.0.1:19001:9001'
+    volumes:
+      - quizpulse_minio-data:/data
+    restart: unless-stopped
+    # The image has bash but no curl: ask the liveness endpoint over a raw TCP connection.
+    healthcheck:
+      test:
+        - CMD
+        - bash
+        - -c
+        - 'exec 3<>/dev/tcp/127.0.0.1/9000 && printf "GET /minio/health/live HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n" >&3 && read -r status <&3 && [[ $$status == *" 200 "* ]]'
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  # One-shot: creates the image bucket. The image has no shell, so the alias comes from MC_HOST_<alias>.
+  minio-init:
+    image: chainguard/minio-client@sha256:72f9978d415ea8294d78051fb3aee2fd258d449237633f77f100b5367bb5225d
+    environment:
+      MC_HOST_local: http://${S3_ACCESS_KEY:-quizpulse-local}:${S3_SECRET_KEY:-quizpulse-local-only}@minio:9000
+    command: [mb, --ignore-existing, 'local/${S3_BUCKET:-quizpulse-images}']
+    depends_on:
+      minio:
+        condition: service_healthy
+    restart: on-failure
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: quizpulse-api:local
+    # Inside Compose the services are reached by name on their container ports; the 1xxxx ports are for the host.
+    environment:
+      PORT: 3000
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8080}
+      DATABASE_URL: postgres://${POSTGRES_USER:-quizpulse}:${POSTGRES_PASSWORD:-quizpulse-local-only}@postgres:5432/${POSTGRES_DB:-quizpulse}
+      REDIS_URL: redis://redis:6379
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-quizpulse-local}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-quizpulse-local-only}
+      S3_BUCKET: ${S3_BUCKET:-quizpulse-images}
+      SESSION_SECRET: ${SESSION_SECRET:-local-dev-session-secret-change-me-0000}
+      CSRF_SECRET: ${CSRF_SECRET:-local-dev-csrf-secret-change-me-000000}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      VALIDATE_RESPONSES: ${VALIDATE_RESPONSES:-true}
+    ports: ['0.0.0.0:3000:3000']
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, wget, -q, -O, '-', 'http://127.0.0.1:3000/healthz']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  # Nginx serving the Vite build and proxying /api and /socket.io to the api service.
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    image: quizpulse-web:local
+    ports: ['0.0.0.0:8080:8080']
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, wget, -q, -O, '-', 'http://127.0.0.1:8080/']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  quizpulse_postgres-data:
+  quizpulse_redis-data:
+  quizpulse_minio-data:

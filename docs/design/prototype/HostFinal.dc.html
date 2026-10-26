@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — финал на большом экране</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 4032px; height: 2564px">
+<h1 class="board-title">Большой экран · финал <span>phase = finished · подиум, полная таблица, подтверждение «Завершить досрочно»</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. Podium -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge badge-success" style="height: 32px; font-size: 16px; padding: 0 14px"><span class="dot"></span>{{v.s.completed}}</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 32px; min-height: 0">
+<h2 class="display" style="margin: 0; font-size: 40px">{{v.s.over}}</h2>
+<div class="muted" style="font-size: 18px; margin-top: 6px">{{v.quiz}}</div>
+<div style="flex: 1; display: flex; align-items: flex-end; gap: 20px; margin-top: 12px">
+<sc-for list="{{v.podium}}" as="p" hint-placeholder-count="3">
+<div style="width: 280px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<span class="avatar" style="width: 64px; height: 64px; font-size: 26px; background: {{p.medal}}; color: {{p.medalInk}}">{{p.initial}}</span>
+<span style="font-size: 26px; font-weight: 700; text-align: center">{{p.nick}}</span>
+<span class="display tnum muted" style="font-size: 22px">{{p.score}}</span>
+<div class="card" style="width: 100%; height: {{p.h}}; border-radius: 18px 18px 0 0; border-bottom: 0; border-top: 8px solid {{p.medal}}; display: flex; justify-content: center; padding-top: 16px">
+<span class="display" style="font-size: 72px; line-height: 1; color: {{p.medal}}">{{p.rank}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.s.saved}}</span>
+<button class="btn btn-ghost btn-lg" style="margin-left: auto">{{v.s.toStudio}}</button>
+<button class="btn btn-primary btn-xl">{{v.s.fullTable}}</button>
+</footer>
+</div>
+</div>
+
+<!-- 2. Full table, aborted -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge badge-warning" style="height: 32px; font-size: 16px; padding: 0 14px"><span class="dot"></span>{{v.s.aborted}}</span>
+<span class="muted" style="font-size: 16px">{{v.s.abortedNote}}</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 4px 48px 20px; min-height: 0">
+<h2 class="display" style="margin: 0; font-size: 32px">{{v.s.results}} · {{v.quiz}}</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: column; grid-template-rows: repeat(7, 54px); column-gap: 24px; row-gap: 8px">
+<sc-for list="{{v.table}}" as="r" hint-placeholder-count="14">
+<div class="row-c" style="gap: 16px; padding: 0 18px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border)">
+<span class="display tnum" style="width: 36px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-size: 16px; background: {{r.medal}}; color: {{r.medalInk}}">{{r.rank}}</span>
+<span style="flex: 1; font-size: 21px; font-weight: 600; color: {{r.ink}}">{{r.nick}}</span>
+<span class="display tnum" style="font-size: 21px">{{r.score}}</span>
+</div>
+</sc-for>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.s.savedAborted}}</span>
+<button class="btn btn-ghost btn-lg" style="margin-left: auto">{{v.s.showPodium}}</button>
+<button class="btn btn-primary btn-xl">{{v.s.toStudio}}</button>
+</footer>
+</div>
+</div>
+
+<!-- 3. Confirm end early -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 7 / 12</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 24px; padding: 4px 32px 24px">
+<h2 class="display" style="margin: 0; font-size: 38px; text-align: center">{{v.q7}}</h2>
+<div style="flex: 1"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div class="opt opt-a" style="height: 88px; font-size: 26px"><span class="shape tri" style="width: 36px; height: 36px"></span>{{v.o0}}</div>
+<div class="opt opt-b" style="height: 88px; font-size: 26px"><span class="shape dia" style="width: 36px; height: 36px"></span>{{v.o1}}</div>
+<div class="opt opt-c" style="height: 88px; font-size: 26px"><span class="shape cir" style="width: 36px; height: 36px"></span>{{v.o2}}</div>
+<div class="opt opt-d" style="height: 88px; font-size: 26px"><span class="shape sq" style="width: 36px; height: 36px"></span>{{v.o3}}</div>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg">{{v.s.pause}}</button>
+</footer>
+<div class="scrim"></div>
+<div class="modal" role="dialog" aria-modal="true" style="left: 50%; top: 50%; transform: translate(-50%, -50%); width: 600px; padding: 36px; display: flex; flex-direction: column; gap: 16px">
+<div style="width: 56px; height: 56px; border-radius: 16px; background: var(--danger-soft); color: var(--danger); display: grid; place-items: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"></path></svg></div>
+<h3 class="display" style="margin: 0; font-size: 28px">{{v.s.confirmTitle}}</h3>
+<p style="margin: 0; font-size: 18px" class="muted">{{v.s.confirmBody}}</p>
+<div class="row-c" style="gap: 12px; justify-content: flex-end; margin-top: 8px">
+<button class="btn btn-ghost btn-lg">{{v.s.cancel}}</button>
+<button class="btn btn-danger btn-lg">{{v.s.confirm}}</button>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":4032,"height":2564}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'Финал · подиум', cap2: 'Финал · полная таблица · прервана', cap3: 'Подтверждение «Завершить досрочно»',
+        completed: 'Завершена', over: 'Игра окончена!', saved: 'Игра сохранена в истории.', toStudio: 'В студию', fullTable: 'Полная таблица',
+        aborted: 'Прервана', abortedNote: 'Ведущий завершил игру на вопросе 7 из 12', results: 'Итоги',
+        savedAborted: 'Сохранено в историю со статусом «прервана».', showPodium: 'Подиум',
+        q: 'Вопрос', end: 'Завершить досрочно', pause: 'Пауза',
+        confirmTitle: 'Завершить игру досрочно?', confirmBody: 'Сразу покажем финал по текущим очкам. Игра попадёт в историю со статусом «прервана». Отменить это нельзя.',
+        cancel: 'Продолжить игру', confirm: 'Завершить'
+      },
+      en: {
+        cap1: 'Final · podium', cap2: 'Final · full table · aborted', cap3: '“End early” confirmation',
+        completed: 'Completed', over: 'Game over!', saved: 'The game is saved to history.', toStudio: 'Back to studio', fullTable: 'Full table',
+        aborted: 'Aborted', abortedNote: 'The host ended the game on question 7 of 12', results: 'Results',
+        savedAborted: 'Saved to history as “aborted”.', showPodium: 'Podium',
+        q: 'Question', end: 'End early', pause: 'Pause',
+        confirmTitle: 'End the game early?', confirmBody: 'We’ll show the final standings with the current scores. The game is saved to history as “aborted”. This can’t be undone.',
+        cancel: 'Keep playing', confirm: 'End game'
+      }
+    };
+    var C = {
+      ru: { quiz: 'Кино 90-х', q7: 'Кто написал музыку к «Королю Льву»?', o: ['Ханс Циммер', 'Джон Уильямс', 'Элтон Джон', 'Алан Менкен'],
+        nicks: ['Мурзик', 'Команда «Сова»', 'Аня', 'Капитан Очевидность', 'Пельмень', 'Dmitry', 'Лис', 'Стол №5', 'Бабушка Зина', 'Ёжик', 'Котик-2', 'Маша', 'Олег', 'Ника'],
+        scores: ['9 840', '9 215', '8 470', '7 120', '6 980', '6 760', '5 540', '4 205', '3 990', '3 640', '2 900', '2 110', '1 300', '0'] },
+      en: { quiz: 'Movies of the 90s', q7: 'Who composed The Lion King score?', o: ['Hans Zimmer', 'John Williams', 'Elton John', 'Alan Menken'],
+        nicks: ['Whiskers', 'Team Owl', 'Anna', 'Captain Obvious', 'Dumpling', 'Dmitry', 'Fox', 'Table 5', 'Grandma Zina', 'Hedgehog', 'Kitty-2', 'Masha', 'Oleg', 'Nika'],
+        scores: ['9,840', '9,215', '8,470', '7,120', '6,980', '6,760', '5,540', '4,205', '3,990', '3,640', '2,900', '2,110', '1,300', '0'] }
+    };
+    var medals = [['var(--gold)', '#1E1600'], ['var(--silver)', '#14161A'], ['var(--bronze)', '#1E1000']];
+    var mk = function (cls, lang, label) {
+      var c = C[lang];
+      var pod = [1, 0, 2].map(function (i) {
+        return { rank: i + 1, nick: c.nicks[i], initial: c.nicks[i].charAt(0), score: c.scores[i], medal: medals[i][0], medalInk: medals[i][1], h: ['300px', '220px', '160px'][i] };
+      });
+      return {
+        cls: cls, label: label, s: S[lang], quiz: c.quiz, q7: c.q7, o0: c.o[0], o1: c.o[1], o2: c.o[2], o3: c.o[3], podium: pod,
+        table: c.nicks.map(function (n, i) {
+          var m = medals[i];
+          return { rank: i + 1, nick: n, score: c.scores[i], medal: m ? m[0] : 'var(--surface-2)', medalInk: m ? m[1] : 'var(--text)', ink: i >= 12 ? 'var(--offline)' : 'var(--text)' };
+        })
+      };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

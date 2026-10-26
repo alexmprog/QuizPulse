@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — дополнительные состояния</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 4358px; height: 2700px">
+<h1 class="board-title">Дополнительные состояния <span>неверный PIN, «время вышло», ошибки картинки, потеря связи у ведущего</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. Player: wrong PIN -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span><span class="row-c" style="gap: 6px"><span class="seg seg-sm"><button class="{{v.ruOn}}">RU</button><button class="{{v.enOn}}">EN</button></span><button class="icon-btn" aria-label="{{v.s.theme}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"></path></svg></button></span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px">
+<h1 class="display" style="margin: 0; font-size: 28px">{{v.s.joinTitle}}</h1>
+<label class="field"><span class="label">{{v.s.pin}}</span><input class="input input-lg invalid tnum" inputmode="numeric" value="482 931" style="letter-spacing: .12em"><span class="err">{{v.s.pinErr}}</span></label>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.next}}</button>
+</div>
+</div>
+</div>
+
+<!-- 2. Player: time is up -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px; background: var(--surface-2)">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}}</span><span class="badge tnum" style="background: var(--surface)">3 / 12</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 14px">
+<div style="width: 120px; height: 120px; border-radius: 50%; background: var(--surface); color: var(--muted); border: 1px solid var(--border); display: grid; place-items: center"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M9 2h6"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 36px">{{v.s.timeUp}}</h1>
+<div class="display tnum muted" style="font-size: 56px">+0</div>
+<div class="muted" style="font-size: 16px; max-width: 290px">{{v.s.timeUpSub}}</div>
+</div>
+<div class="card row-c" style="justify-content: space-between; padding: 14px 16px"><span class="muted">{{v.s.total}}</span><span class="display tnum" style="font-size: 20px">{{v.total}}</span></div>
+</div>
+</div>
+
+<!-- 3. Studio: image upload states -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="screen {{v.cls}}" style="width: 760px; height: 760px; padding: 28px; display: flex; flex-direction: column; gap: 18px">
+<h2 class="display" style="margin: 0; font-size: 20px">{{v.s.imgTitle}}</h2>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="label">{{v.s.uploading}}</span>
+<div class="row-c" style="gap: 16px; padding: 12px; border-radius: 14px; border: 1px solid var(--border)">
+<div style="width: 160px; height: 90px; border-radius: 10px; background: var(--surface-2); display: grid; place-items: center"><div class="spinner" style="width: 32px; height: 32px; border-width: 4px"></div></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 8px"><span class="row-c" style="justify-content: space-between"><span style="font-weight: 600">matrix-still.jpg</span><span class="muted tnum" style="font-size: 13px">64%</span></span><div class="bar"><i style="width: 64%"></i></div><span class="hint">2,6 / 4,1 MB</span></div>
+<button class="btn btn-ghost btn-sm">{{v.s.cancel}}</button>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="label">{{v.s.tooBig}}</span>
+<div style="height: 110px; border-radius: 14px; border: 2px dashed var(--danger); background: var(--danger-soft); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--danger); text-align: center; padding: 0 16px">
+<span class="row-c" style="gap: 8px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>{{v.s.tooBigErr}}</span>
+<span style="font-size: 13px">{{v.s.dropAgain}} <a class="link" href="#" style="color: var(--danger); text-decoration: underline">{{v.s.choose}}</a></span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="label">{{v.s.badType}}</span>
+<div style="height: 110px; border-radius: 14px; border: 2px dashed var(--danger); background: var(--danger-soft); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--danger); text-align: center; padding: 0 16px">
+<span class="row-c" style="gap: 8px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>{{v.s.badTypeErr}}</span>
+<span style="font-size: 13px">{{v.s.dropAgain}} <a class="link" href="#" style="color: var(--danger); text-decoration: underline">{{v.s.choose}}</a></span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="label">{{v.s.failed}}</span>
+<div class="row-c" style="gap: 16px; padding: 12px; border-radius: 14px; border: 1px solid var(--danger)">
+<div style="width: 160px; height: 90px; border-radius: 10px; background: var(--danger-soft); color: var(--danger); display: grid; place-items: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 2l20 20M5 13a10 10 0 0 1 5.2-2.8M8.5 16.5a5 5 0 0 1 7 0M12 20h.01M19 13a10 10 0 0 0-2.3-1.7"></path></svg></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600">matrix-still.jpg</span><span class="err">{{v.s.failedErr}}</span></div>
+<button class="btn btn-primary btn-sm">{{v.s.retry}}</button>
+<button class="btn btn-sm" style="background: transparent; color: var(--danger)">{{v.s.remove}}</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 4. Host: own connection lost -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap4}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 3 / 12</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 20px; padding: 4px 32px 20px; min-height: 0">
+<h2 class="display" style="margin: 0; font-size: 38px; text-align: center; min-height: 92px; display: flex; align-items: center; justify-content: center">{{v.q1}}</h2>
+<div style="flex: 1"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div class="opt opt-a" style="height: 88px; font-size: 26px"><span class="shape tri" style="width: 36px; height: 36px"></span>{{v.o0}}</div>
+<div class="opt opt-b" style="height: 88px; font-size: 26px"><span class="shape dia" style="width: 36px; height: 36px"></span>{{v.o1}}</div>
+<div class="opt opt-c" style="height: 88px; font-size: 26px"><span class="shape cir" style="width: 36px; height: 36px"></span>{{v.o2}}</div>
+<div class="opt opt-d" style="height: 88px; font-size: 26px"><span class="shape sq" style="width: 36px; height: 36px"></span>{{v.o3}}</div>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto" disabled="">{{v.s.end}}</button>
+<button class="btn btn-lg" disabled="">{{v.s.pause}}</button>
+</footer>
+<div class="scrim"></div>
+<div class="modal" role="status" style="left: 50%; top: 50%; transform: translate(-50%, -50%); width: 620px; padding: 36px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+<div class="spinner" style="width: 64px; height: 64px; border-width: 6px"></div>
+<h3 class="display" style="margin: 0; font-size: 30px">{{v.s.lostTitle}}</h3>
+<p class="muted" style="margin: 0; font-size: 18px">{{v.s.lostBody}}</p>
+<span class="badge badge-warning" style="height: 32px; font-size: 15px; padding: 0 14px"><span class="dot"></span>{{v.s.lostBadge}}</span>
+</div>
+</div>
+</div>
+
+<!-- 5. Host: back after disconnect, auto-pause -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap5}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 3 / 12</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 32px">
+<div style="width: 128px; height: 128px; border-radius: 50%; background: var(--warning-soft); color: var(--warning); display: grid; place-items: center"><svg width="56" height="56" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></div>
+<h2 class="display" style="margin: 0; font-size: 64px">{{v.s.backTitle}}</h2>
+<p style="margin: 0; font-size: 24px; text-align: center; max-width: 860px">{{v.s.backBody}}</p>
+<div class="row-c" style="gap: 12px; margin-top: 8px">
+<span class="badge tnum" style="height: 36px; font-size: 17px; padding: 0 16px">{{v.s.left}}</span>
+<span class="badge tnum" style="height: 36px; font-size: 17px; padding: 0 16px">{{v.s.online}}</span>
+</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.s.autoEnd}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-primary btn-xl"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>{{v.s.resume}}</button>
+</footer>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":4358,"height":2700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'Пульт: неверный PIN', cap2: 'Пульт: время вышло', cap3: 'Студия: картинка — загрузка и ошибки',
+        cap4: 'Экран ведущего: связь потеряна', cap5: 'Экран ведущего: вернулся, автопауза',
+        theme: 'Сменить тему', joinTitle: 'Вход в игру', pin: 'PIN игры', next: 'Дальше',
+        pinErr: 'Игра с PIN 482 931 не найдена. Проверьте цифры на экране ведущего.',
+        timeUp: 'Время вышло', timeUpSub: 'Ответ не успел — за вопрос 0 очков, без штрафа.', total: 'Всего',
+        imgTitle: 'Картинка к вопросу', uploading: 'Загрузка', cancel: 'Отменить',
+        tooBig: 'Файл слишком большой', tooBigErr: 'Файл весит 7,2 МБ, а можно до 5 МБ.',
+        badType: 'Неподдерживаемый формат', badTypeErr: 'Формат GIF не подходит. Нужен JPEG, PNG или WebP.',
+        dropAgain: 'Перетащите другой файл или', choose: 'выберите файл',
+        failed: 'Загрузка не удалась', failedErr: 'Не удалось загрузить: нет связи с сервером.', retry: 'Повторить', remove: 'Убрать',
+        q: 'Вопрос', end: 'Завершить досрочно', pause: 'Пауза', resume: 'Продолжить',
+        lostTitle: 'Связь с сервером потеряна', lostBody: 'Переподключаемся… Пока экран ведущего отключён, игра стоит на паузе у всех игроков.',
+        lostBadge: 'Игра на автопаузе',
+        backTitle: 'Игра на паузе', backBody: 'Экран ведущего был отключён, поэтому игра встала на паузу. Вопрос скрыт, время остановлено.',
+        left: 'Останется 14 с', online: 'В сети 13 из 14', autoEnd: 'Без ведущего игра завершится сама через 30 минут.'
+      },
+      en: {
+        cap1: 'Player: wrong PIN', cap2: 'Player: time is up', cap3: 'Studio: image upload and errors',
+        cap4: 'Host screen: connection lost', cap5: 'Host screen: back, auto-paused',
+        theme: 'Switch theme', joinTitle: 'Join a game', pin: 'Game PIN', next: 'Next',
+        pinErr: 'No game with PIN 482 931. Check the digits on the host screen.',
+        timeUp: 'Time’s up', timeUpSub: 'No answer in time — 0 points for this question, no penalty.', total: 'Total',
+        imgTitle: 'Question image', uploading: 'Uploading', cancel: 'Cancel',
+        tooBig: 'File too large', tooBigErr: 'The file is 7.2 MB; the limit is 5 MB.',
+        badType: 'Unsupported format', badTypeErr: 'GIF isn’t supported. Use JPEG, PNG or WebP.',
+        dropAgain: 'Drop another file or', choose: 'choose a file',
+        failed: 'Upload failed', failedErr: 'Couldn’t upload: no connection to the server.', retry: 'Retry', remove: 'Remove',
+        q: 'Question', end: 'End early', pause: 'Pause', resume: 'Resume',
+        lostTitle: 'Connection to the server lost', lostBody: 'Reconnecting… While the host screen is offline, the game is paused for every player.',
+        lostBadge: 'Game auto-paused',
+        backTitle: 'Game paused', backBody: 'The host screen was offline, so the game paused. The question is hidden and the timer is stopped.',
+        left: '14 s left after resume', online: '13 of 14 online', autoEnd: 'Without the host, the game ends by itself after 30 minutes.'
+      }
+    };
+    var C = {
+      ru: { nick: 'Мурзик', total: '1 840', q1: 'Кто сыграл Нео в «Матрице»?', o: ['Киану Ривз', 'Брэд Питт', 'Том Круз', 'Джонни Депп'] },
+      en: { nick: 'Whiskers', total: '1,840', q1: 'Who played Neo in The Matrix?', o: ['Keanu Reeves', 'Brad Pitt', 'Tom Cruise', 'Johnny Depp'] }
+    };
+    var mk = function (cls, lang, label) {
+      var en = lang === 'en';
+      var c = C[lang];
+      return {
+        cls: cls, label: label, s: S[lang], ruOn: en ? '' : 'on', enOn: en ? 'on' : '',
+        nick: c.nick, total: c.total, q1: c.q1, o0: c.o[0], o1: c.o[1], o2: c.o[2], o3: c.o[3]
+      };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — основа</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 1600px; height: 1900px; display: flex; flex-direction: column">
+<h1 class="board-title">Основа <span>токены, типографика, варианты ответа, базовые компоненты — светлая и тёмная тема</span></h1>
+<div style="display: flex; gap: 48px; flex: 1">
+<sc-for list="{{themes}}" as="t" hint-placeholder-count="2">
+<div class="{{t.cls}}" style="width: 728px; border-radius: 16px; padding: 40px; display: flex; flex-direction: column; gap: 36px">
+<div class="row-c" style="justify-content: space-between">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge badge-accent">{{t.name}}</span>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="display" style="margin: 0; font-size: 20px">Цвета</h2>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{t.colors}}" as="c" hint-placeholder-count="16">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="height: 44px; border-radius: 10px; border: 1px solid var(--border); background: {{c.hex}}"></div>
+<div style="font-size: 12px; font-weight: 600">{{c.name}}</div>
+<div class="muted tnum" style="font-size: 12px">{{c.hex}}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="display" style="margin: 0; font-size: 20px">Варианты ответа</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<button class="opt opt-a" style="height: 72px; font-size: 20px"><span class="shape tri"></span>A · треугольник</button>
+<button class="opt opt-b" style="height: 72px; font-size: 20px"><span class="shape dia"></span>B · ромб</button>
+<button class="opt opt-c" style="height: 72px; font-size: 20px"><span class="shape cir"></span>C · круг</button>
+<button class="opt opt-d" style="height: 72px; font-size: 20px"><span class="shape sq"></span>D · квадрат</button>
+</div>
+<div class="muted" style="font-size: 13px">Правда/ложь: «Правда» = B (синий ромб), «Ложь» = A (красный треугольник). Цвет никогда не единственный признак — всегда фигура и текст.</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 10px">
+<h2 class="display" style="margin: 0; font-size: 20px">Типографика</h2>
+<div class="display" style="font-size: 40px">482 913</div>
+<div class="display" style="font-size: 28px">Какой фильм вышел в 1994?</div>
+<div style="font-size: 20px; font-weight: 600">Onest 20 / 600 — заголовок карточки</div>
+<div style="font-size: 15px">Onest 15 / 400 — основной текст студии, подписи полей и таблицы.</div>
+<div class="muted" style="font-size: 13px">Onest 13 — подсказки, счётчики 0/300, мета-данные</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="display" style="margin: 0; font-size: 20px">Компоненты</h2>
+<div class="row-c" style="gap: 10px; flex-wrap: wrap">
+<button class="btn btn-primary">Начать игру</button>
+<button class="btn">Вторичная</button>
+<button class="btn btn-ghost">Контурная</button>
+<button class="btn btn-danger-ghost">Завершить</button>
+<button class="btn btn-danger">Удалить</button>
+<button class="btn btn-primary" disabled="">Недоступна</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<label class="field"><span class="label">Email</span><input class="input focus" value="host@example.com"></label>
+<label class="field"><span class="label">Ник</span><input class="input invalid" value="Кот"><span class="err">Ник уже занят</span></label>
+</div>
+<div class="row-c" style="gap: 12px; flex-wrap: wrap">
+<span class="seg"><button class="on">Вручную</button><button>Авто</button></span>
+<button class="switch on" aria-label="Досрочное закрытие"></button>
+<button class="switch" aria-label="Выключено"></button>
+<span class="badge badge-success"><span class="dot"></span>Завершена</span>
+<span class="badge badge-warning"><span class="dot"></span>Прервана</span>
+<span class="badge badge-accent">x2</span>
+<span class="badge">RU</span>
+</div>
+<div class="row-c" style="gap: 10px; flex-wrap: wrap">
+<span class="pchip">Мурзик<button class="x" aria-label="Удалить игрока"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span>
+<span class="pchip off"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2.3-1.7M12 20h.01"></path></svg>Офлайн-ник<button class="x" aria-label="Удалить игрока"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></span>
+<div class="ring" style="--p: 62; width: 72px; height: 72px"><span class="display tnum" style="font-size: 22px">12</span></div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 10px">
+<h2 class="display" style="margin: 0; font-size: 20px">Отступы и радиусы</h2>
+<div class="row-c" style="gap: 10px; align-items: flex-end">
+<sc-for list="{{t.space}}" as="s" hint-placeholder-count="10">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<div style="background: var(--accent); width: {{s.px}}; height: {{s.px}}; border-radius: 2px"></div>
+<span class="muted tnum" style="font-size: 11px">{{s.v}}</span>
+</div>
+</sc-for>
+</div>
+<div class="row-c" style="gap: 12px">
+<sc-for list="{{t.radii}}" as="r" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<div style="width: 56px; height: 56px; border: 2px solid var(--accent); background: var(--accent-soft); border-radius: {{r.px}}"></div>
+<span class="muted" style="font-size: 11px">{{r.name}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var light = [
+      ['bg', '#F5F4FA'], ['surface', '#FFFFFF'], ['surface-2', '#EEECF5'], ['border', '#DEDAEA'],
+      ['text', '#17141F'], ['muted', '#5D586C'], ['offline', '#767185'], ['accent', '#5B3BEF'],
+      ['accent-soft', '#ECE8FF'], ['success', '#12804F'], ['warning', '#8F5B00'], ['danger', '#C9343A'],
+      ['opt-a', '#D6383E'], ['opt-b', '#2459D6'], ['opt-c', '#F2B305'], ['opt-d', '#12805A']
+    ];
+    var dark = [
+      ['bg', '#100E17'], ['surface', '#1A1823'], ['surface-2', '#252231'], ['border', '#332F42'],
+      ['text', '#F3F1FA'], ['muted', '#A7A2B8'], ['offline', '#85809A'], ['accent', '#8C74FF'],
+      ['accent-soft', '#261F47'], ['success', '#3CCB86'], ['warning', '#F5C04A'], ['danger', '#FF6B70'],
+      ['opt-a', '#D6383E'], ['opt-b', '#2459D6'], ['opt-c', '#F2B305'], ['opt-d', '#12805A']
+    ];
+    var map = function (xs) { return xs.map(function (c) { return { name: c[0], hex: c[1] }; }); };
+    var space = [4, 8, 12, 16, 20, 24, 32, 40, 48, 64].map(function (v) { return { v: v, px: v + 'px' }; });
+    var radii = [['sm 8', '8px'], ['md 12', '12px'], ['lg 16', '16px'], ['xl 24', '24px'], ['phone 28', '28px'], ['pill', '999px']].map(function (r) { return { name: r[0], px: r[1] }; });
+    return {
+      themes: [
+        { cls: 'qp', name: 'Светлая', colors: map(light), space: space, radii: radii },
+        { cls: 'qp dark', name: 'Тёмная', colors: map(dark), space: space, radii: radii }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

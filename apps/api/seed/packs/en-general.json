@@ -1,0 +1,146 @@
+{
+  "packKey": "en-general",
+  "language": "en",
+  "title": "General knowledge",
+  "settings": {
+    "advanceMode": "manual",
+    "autoAdvanceSeconds": 8,
+    "defaultTimeLimitSeconds": 20,
+    "earlyClose": true,
+    "leaderboardEvery": 5
+  },
+  "questions": [
+    {
+      "type": "single_choice",
+      "text": "What is the capital of Australia?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Sydney", "Melbourne", "Canberra", "Perth"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "The Great Wall of China is visible from the Moon with the naked eye.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Which planet is known as the Red Planet?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Venus", "Mars", "Jupiter", "Mercury"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "How many strings does a standard violin have?",
+      "imageId": null,
+      "timeLimitSeconds": 20,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 4,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Who painted the Mona Lisa?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Leonardo da Vinci", "Michelangelo", "Raphael", "Vincent van Gogh"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Sound travels faster in water than in air.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "What is the chemical symbol for gold?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Ag", "Gd", "Go", "Au"],
+      "correctOption": 3,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "In what year did World War II end?",
+      "imageId": null,
+      "timeLimitSeconds": 30,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 1945,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Which is the largest ocean on Earth?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Botanically, a tomato is a fruit.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "In which country is the city of Marrakech?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 2,
+      "options": ["Egypt", "Tunisia", "Morocco", "Turkey"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "How many minutes are there in one day?",
+      "imageId": null,
+      "timeLimitSeconds": 40,
+      "multiplier": 3,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 1440,
+      "numericTolerance": 0
+    }
+  ]
+}

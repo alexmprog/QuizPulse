@@ -1,0 +1,470 @@
+/*
+ * The player remote (/play). Mobile-first, drawn at 375 px: one column that fills the phone screen, every tap
+ * target at least 44 px, answer buttons at least 64 px. Colours come from tokens.css only.
+ */
+.play {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
+}
+.play-tone-success {
+    background: var(--success-soft);
+}
+.play-tone-danger {
+    background: var(--danger-soft);
+}
+.play-tone-neutral {
+    background: var(--surface-2);
+}
+.play-col {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+}
+.play-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+}
+
+/* pre-game top bar */
+.play-brand {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.play-brand .logo {
+    font-size: 16px;
+}
+.play-brand .logo-mark {
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+}
+/* The language and theme switch: full 44 px tap targets on a phone. */
+.play .seg button {
+    height: 44px;
+}
+
+/* in-game header */
+.play-head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.play-head-row {
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 28px;
+}
+.play-head-me {
+    min-width: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.play-head-badges {
+    flex: none;
+    gap: 6px;
+}
+.play-tone-success .play-head-badge,
+.play-tone-danger .play-head-badge,
+.play-tone-neutral .play-head-badge {
+    background: var(--surface);
+}
+.play-timer {
+    gap: 10px;
+}
+.play-bar {
+    flex: 1;
+}
+.play-bar > i {
+    transition: width 0.25s linear;
+}
+.play-timer-sec {
+    width: 36px;
+    font-size: 16px;
+    text-align: right;
+}
+
+/* shared blocks */
+.play-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+}
+.play-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.play-title {
+    margin: 0;
+    font-size: 28px;
+}
+.play-title-sm {
+    margin: 0;
+    font-size: 26px;
+}
+.play-text {
+    margin: 0;
+    font-size: 16px;
+}
+.play-narrow {
+    max-width: 300px;
+}
+.play-form-err {
+    margin: 0;
+    text-align: center;
+}
+.play-foot {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+}
+.play-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+}
+.play-icon svg {
+    width: 50%;
+    height: 50%;
+}
+.play-icon-md {
+    width: 88px;
+    height: 88px;
+}
+.play-icon-lg {
+    width: 112px;
+    height: 112px;
+}
+.play-icon-accent {
+    background: var(--accent);
+    color: var(--on-accent);
+}
+.play-icon-accent-soft {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+.play-icon-warning {
+    background: var(--warning-soft);
+    color: var(--warning);
+}
+.play-icon-danger {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+.play-icon-neutral {
+    background: var(--surface-2);
+    color: var(--muted);
+}
+
+/* join */
+.play-pin-input {
+    letter-spacing: 0.12em;
+}
+.play-game-card {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 16px;
+}
+.play-game-card-center {
+    text-align: center;
+}
+.play-game-pin {
+    font-size: 13px;
+}
+.play-game-title {
+    font-size: 18px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+.play-nick-input {
+    height: 56px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.play-nick-meta {
+    justify-content: space-between;
+    gap: 8px;
+}
+.play-over {
+    color: var(--danger);
+}
+
+/* lobby */
+.play-avatar {
+    width: 96px;
+    height: 96px;
+    font-size: 40px;
+}
+.play-lobby-nick {
+    font-size: 30px;
+    overflow-wrap: anywhere;
+}
+.play-badge-lg {
+    height: 30px;
+    font-size: 14px;
+}
+
+/* answer */
+.play-answer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.play-look {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+}
+.play-options {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.play-options .opt {
+    /* The options share the height left on the screen equally, never below 64 px. */
+    flex: 1 1 0;
+    min-height: 64px;
+    font-size: 20px;
+    overflow-wrap: anywhere;
+}
+.play-options .shape {
+    width: 32px;
+    height: 32px;
+}
+.play-options-tf .opt {
+    justify-content: center;
+    font-size: 28px;
+}
+.play-options-tf .shape {
+    width: 40px;
+    height: 40px;
+}
+.play-numeric-label {
+    font-size: 15px;
+    text-align: center;
+}
+.play-numeric-input {
+    height: 88px;
+    font-size: 44px;
+}
+.play-once {
+    margin: 0;
+    text-align: center;
+}
+.play-note {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* accepted */
+.play-chosen .opt {
+    width: auto;
+    min-height: 56px;
+    font-size: 18px;
+}
+.play-chosen .shape {
+    width: 24px;
+    height: 24px;
+}
+.play-chosen-number {
+    padding: 10px 24px;
+    font-size: 32px;
+}
+
+/* result */
+.play-result-icon-success {
+    width: 120px;
+    height: 120px;
+    background: var(--success);
+    color: var(--bg);
+}
+.play-result-icon-danger {
+    width: 120px;
+    height: 120px;
+    background: var(--danger);
+    color: var(--bg);
+}
+.play-result-icon-neutral {
+    width: 120px;
+    height: 120px;
+    background: var(--surface);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+.play-result-title {
+    margin: 0;
+    font-size: 40px;
+}
+.play-result-title-success {
+    color: var(--success);
+}
+.play-result-title-danger {
+    color: var(--danger);
+}
+.play-result-title-neutral {
+    font-size: 36px;
+}
+.play-points {
+    font-size: 56px;
+}
+.play-total {
+    justify-content: space-between;
+    padding: 14px 16px;
+}
+.play-total-score {
+    font-size: 20px;
+}
+
+/* rank */
+.play-rank {
+    gap: 10px;
+}
+.play-rank-label {
+    font-size: 17px;
+    font-weight: 600;
+}
+.play-rank-place {
+    font-size: 120px;
+    line-height: 1;
+    color: var(--accent);
+}
+.play-rank-score {
+    margin-top: 18px;
+    padding: 14px 24px;
+}
+.play-rank-points {
+    font-size: 28px;
+}
+
+/* final */
+.play-final {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.play-final-me {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-top: 24px;
+    text-align: center;
+}
+.play-medal {
+    background: var(--surface-2);
+    color: var(--text);
+}
+.play-medal-1 {
+    background: var(--gold);
+    color: var(--on-opt-c);
+}
+.play-medal-2 {
+    background: var(--silver);
+    color: var(--on-opt-c);
+}
+.play-medal-3 {
+    background: var(--bronze);
+    color: var(--on-opt-c);
+}
+.play-place {
+    width: 120px;
+    height: 120px;
+    margin-top: 10px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 56px;
+}
+.play-place-label {
+    font-size: 18px;
+    font-weight: 600;
+}
+.play-final-score {
+    font-size: 36px;
+}
+.play-final-exit {
+    margin-top: auto;
+}
+.play-podium {
+    margin: auto 0 0;
+    padding: 8px;
+    list-style: none;
+}
+.play-podium-row {
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+.play-podium-row.is-me {
+    background: var(--accent-soft);
+}
+.play-podium-rank {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+}
+.play-podium-nick {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+.play-podium-score {
+    font-weight: 700;
+}
+
+/* reconnecting */
+.play-lost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 22px;
+    text-align: center;
+}
+.play-lost-title {
+    margin: 0;
+    font-size: 22px;
+}
+.play-lost-text {
+    margin: 0;
+    font-size: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .play-bar > i {
+        transition: none;
+    }
+}

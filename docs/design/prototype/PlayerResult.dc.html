@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — пульт игрока: результаты</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 3009px; height: 2684px">
+<h1 class="board-title">Пульт · результаты и системные состояния <span>верно/неверно, место, финал, удалён, игра закрыта, переподключение</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. Correct -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px; background: var(--success-soft)">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}}</span><span class="badge tnum" style="background: var(--surface)">3 / 12</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 14px">
+<div style="width: 120px; height: 120px; border-radius: 50%; background: var(--success); color: var(--bg); display: grid; place-items: center"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 40px; color: var(--success)">{{v.s.correct}}</h1>
+<div class="display tnum" style="font-size: 56px">+840</div>
+<div class="muted" style="font-size: 16px">{{v.s.points}}</div>
+</div>
+<div class="card row-c" style="justify-content: space-between; padding: 14px 16px"><span class="muted">{{v.s.total}}</span><span class="display tnum" style="font-size: 20px">{{v.total}}</span></div>
+</div>
+</div>
+
+<!-- 2. Wrong -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px; background: var(--danger-soft)">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}}</span><span class="badge tnum" style="background: var(--surface)">3 / 12</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 14px">
+<div style="width: 120px; height: 120px; border-radius: 50%; background: var(--danger); color: var(--bg); display: grid; place-items: center"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 40px; color: var(--danger)">{{v.s.wrong}}</h1>
+<div class="display tnum" style="font-size: 56px">+0</div>
+<div class="muted" style="font-size: 16px">{{v.s.seeScreen}}</div>
+</div>
+<div class="card row-c" style="justify-content: space-between; padding: 14px 16px"><span class="muted">{{v.s.total}}</span><span class="display tnum" style="font-size: 20px">{{v.totalWrong}}</span></div>
+</div>
+</div>
+
+<!-- 3. Rank after leaderboard -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}}</span><span class="badge tnum">{{v.s.after3}}</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 10px">
+<div class="muted" style="font-size: 17px; font-weight: 600">{{v.s.yourPlace}}</div>
+<div class="display tnum" style="font-size: 120px; line-height: 1; color: var(--accent)">4</div>
+<div class="muted" style="font-size: 17px">{{v.s.of14}}</div>
+<div class="card" style="margin-top: 18px; padding: 14px 24px"><span class="display tnum" style="font-size: 28px">{{v.rankScore}}</span> <span class="muted">{{v.s.pts}}</span></div>
+</div>
+<p class="muted" style="margin: 0; text-align: center; font-size: 14px">{{v.s.lbOnScreen}}</p>
+</div>
+</div>
+
+<!-- 4. Final -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap4}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 14px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}}</span><span class="badge badge-success"><span class="dot"></span>{{v.s.completed}}</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding-top: 24px">
+<h1 class="display" style="margin: 0; font-size: 26px">{{v.s.over}}</h1>
+<div style="width: 120px; height: 120px; border-radius: 50%; background: var(--silver); color: #14161A; display: grid; place-items: center; margin-top: 10px"><span class="display" style="font-size: 56px">2</span></div>
+<div style="font-size: 18px; font-weight: 600">{{v.s.place2}}</div>
+<div class="display tnum" style="font-size: 36px">{{v.finalScore}}</div>
+</div>
+<div class="card" style="margin-top: auto; padding: 8px">
+<sc-for list="{{v.podium}}" as="p" hint-placeholder-count="3">
+<div class="row-c" style="gap: 12px; height: 48px; padding: 0 10px; border-radius: 10px; background: {{p.bg}}">
+<span class="display" style="width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-size: 14px; background: {{p.medal}}; color: {{p.ink}}">{{p.rank}}</span>
+<span style="flex: 1; font-weight: 600">{{p.nick}}</span><span class="tnum" style="font-weight: 700">{{p.score}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<!-- 5. Kicked -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap5}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 16px">
+<div style="width: 96px; height: 96px; border-radius: 50%; background: var(--danger-soft); color: var(--danger); display: grid; place-items: center"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="8" r="4"></circle><path d="M3 21a7 7 0 0 1 12-4.9M17 15l4 4M21 15l-4 4"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 26px">{{v.s.kicked}}</h1>
+<p class="muted" style="margin: 0; font-size: 16px">{{v.s.kickedSub}}</p>
+</div>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.enterPin}}</button>
+</div>
+</div>
+
+<!-- 6. Game closed -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap6}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 16px">
+<div style="width: 96px; height: 96px; border-radius: 50%; background: var(--surface-2); color: var(--muted); display: grid; place-items: center"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 26px">{{v.s.closed}}</h1>
+<p class="muted" style="margin: 0; font-size: 16px">{{v.s.closedSub}}</p>
+</div>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.enterPin}}</button>
+</div>
+</div>
+
+<!-- 7. Reconnecting -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap7}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}} · <span class="tnum">{{v.total}}</span></span><span class="badge tnum">5 / 12</span></div>
+<div class="bar"><i style="width: 70%"></i></div>
+<div class="opt opt-a" style="flex: 1; font-size: 20px"><span class="shape tri" style="width: 32px; height: 32px"></span>{{v.o0}}</div>
+<div class="opt opt-b" style="flex: 1; font-size: 20px"><span class="shape dia" style="width: 32px; height: 32px"></span>{{v.o1}}</div>
+<div class="opt opt-c" style="flex: 1; font-size: 20px"><span class="shape cir" style="width: 32px; height: 32px"></span>{{v.o2}}</div>
+<div class="opt opt-d" style="flex: 1; font-size: 20px"><span class="shape sq" style="width: 32px; height: 32px"></span>{{v.o3}}</div>
+<div class="scrim"></div>
+<div class="modal" role="status" style="left: 16px; right: 16px; top: 50%; transform: translateY(-50%); padding: 28px 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px">
+<div class="spinner"></div>
+<h2 class="display" style="margin: 0; font-size: 22px">{{v.s.reconnecting}}</h2>
+<p class="muted" style="margin: 0; font-size: 15px">{{v.s.reconnectingSub}}</p>
+</div>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":3009,"height":2684}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'Результат: верно', cap2: 'Результат: неверно', cap3: 'Место после лидерборда', cap4: 'Финал', cap5: 'Вас удалили', cap6: 'Игра закрыта', cap7: 'Переподключение',
+        correct: 'Верно!', points: 'очков за быстрый ответ', total: 'Всего', wrong: 'Неверно', seeScreen: 'Верный ответ — на большом экране',
+        after3: 'После вопроса 3', yourPlace: 'Ваше место', of14: 'из 14 игроков', pts: 'очков', lbOnScreen: 'Топ-10 — на большом экране',
+        completed: 'Завершена', over: 'Игра окончена', place2: 'место',
+        kicked: 'Вас удалили из игры', kickedSub: 'Ведущий убрал вас из лобби. Можно войти в другую игру.',
+        closed: 'Игра закрыта', closedSub: 'Ведущий закрыл эту игру. Спасибо, что играли!', enterPin: 'Ввести PIN',
+        reconnecting: 'Переподключаемся…', reconnectingSub: 'Ваше место и очки сохранены. Не закрывайте страницу.'
+      },
+      en: {
+        cap1: 'Result: correct', cap2: 'Result: wrong', cap3: 'Place after leaderboard', cap4: 'Final', cap5: 'Removed', cap6: 'Game closed', cap7: 'Reconnecting',
+        correct: 'Correct!', points: 'points for a fast answer', total: 'Total', wrong: 'Wrong', seeScreen: 'The correct answer is on the big screen',
+        after3: 'After question 3', yourPlace: 'Your place', of14: 'of 14 players', pts: 'points', lbOnScreen: 'Top 10 is on the big screen',
+        completed: 'Completed', over: 'Game over', place2: 'place',
+        kicked: 'You were removed', kickedSub: 'The host removed you from the lobby. You can join another game.',
+        closed: 'Game closed', closedSub: 'The host closed this game. Thanks for playing!', enterPin: 'Enter a PIN',
+        reconnecting: 'Reconnecting…', reconnectingSub: 'Your seat and score are safe. Keep this page open.'
+      }
+    };
+    var C = {
+      ru: { nick: 'Мурзик', total: '2 680', totalWrong: '1 840', rankScore: '2 120', finalScore: '9 215', o: ['Люк Бессон', 'Гай Ричи', 'Квентин Тарантино', 'Дэвид Финчер'],
+        podium: [['Команда «Сова»', '9 840'], ['Мурзик', '9 215'], ['Аня', '8 470']] },
+      en: { nick: 'Whiskers', total: '2,680', totalWrong: '1,840', rankScore: '2,120', finalScore: '9,215', o: ['Luc Besson', 'Guy Ritchie', 'Quentin Tarantino', 'David Fincher'],
+        podium: [['Team Owl', '9,840'], ['Whiskers', '9,215'], ['Anna', '8,470']] }
+    };
+    var medals = [['var(--gold)', '#1E1600'], ['var(--silver)', '#14161A'], ['var(--bronze)', '#1E1000']];
+    var mk = function (cls, lang, label) {
+      var c = C[lang];
+      return {
+        cls: cls, label: label, s: S[lang], nick: c.nick, total: c.total, totalWrong: c.totalWrong, rankScore: c.rankScore, finalScore: c.finalScore,
+        o0: c.o[0], o1: c.o[1], o2: c.o[2], o3: c.o[3],
+        podium: c.podium.map(function (p, i) { return { rank: i + 1, nick: p[0], score: p[1], medal: medals[i][0], ink: medals[i][1], bg: i === 1 ? 'var(--accent-soft)' : 'transparent' }; })
+      };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

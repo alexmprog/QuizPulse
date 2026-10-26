@@ -1,0 +1,59 @@
+/* Design tokens, ported from docs/design/prototype/qp.css. Light on :root, dark on :root.dark. */
+:root {
+    --bg: #f5f4fa;
+    --surface: #ffffff;
+    --surface-2: #eeecf5;
+    --border: #dedaea;
+    --text: #17141f;
+    --muted: #5d586c;
+    --offline: #767185;
+    --accent: #5b3bef;
+    --accent-hover: #4b2bdb;
+    --on-accent: #ffffff;
+    --accent-soft: #ece8ff;
+    --success: #12804f;
+    --success-soft: #e1f4ea;
+    --danger: #c9343a;
+    --on-danger: #ffffff;
+    --danger-soft: #fce7e8;
+    --warning: #8f5b00;
+    --warning-soft: #fff1cf;
+    --scrim: rgba(16, 12, 32, 0.55);
+    --shadow: 0 1px 2px rgba(20, 16, 40, 0.06), 0 8px 24px rgba(20, 16, 40, 0.08);
+    --opt-a: #d6383e;
+    --opt-b: #2459d6;
+    --opt-c: #f2b305;
+    --opt-d: #12805a;
+    --on-opt: #ffffff;
+    --on-opt-c: #1e1600;
+    --gold: #e3a80f;
+    --silver: #9aa3b2;
+    --bronze: #c0773f;
+    --font-display: 'Unbounded', system-ui, sans-serif;
+    --font-body: 'Onest', system-ui, sans-serif;
+    color-scheme: light;
+}
+
+:root.dark {
+    --bg: #100e17;
+    --surface: #1a1823;
+    --surface-2: #252231;
+    --border: #332f42;
+    --text: #f3f1fa;
+    --muted: #a7a2b8;
+    --offline: #85809a;
+    --accent: #8c74ff;
+    --accent-hover: #a18eff;
+    --on-accent: #140c38;
+    --accent-soft: #261f47;
+    --success: #3ccb86;
+    --success-soft: #12301f;
+    --danger: #ff6b70;
+    --on-danger: #2b0a0c;
+    --danger-soft: #3b1a1d;
+    --warning: #f5c04a;
+    --warning-soft: #36290b;
+    --scrim: rgba(0, 0, 0, 0.62);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+}

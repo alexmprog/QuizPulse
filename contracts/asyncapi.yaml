@@ -1,0 +1,633 @@
+asyncapi: 3.0.0
+info:
+  title: QuizPulse game socket protocol
+  version: 1.0.0
+  description: |
+    Documentation of the Socket.io namespace `/game` for clients that cannot import `@quizpulse/protocol`
+    (for example a future Compose Multiplatform client). The TypeScript package is the source of truth;
+    this file must list exactly the events of `CLIENT_EVENTS` and `SERVER_EVENTS` (checked by a test).
+
+    Every client event is sent with a Socket.io acknowledgement callback. The ack is either `{ ok: true, ...extra }`
+    or `{ ok: false, code }` with an `ErrorCode`; it is documented per message in `x-ack`.
+    Server events carry a full state snapshot, never a diff. The correct answer is absent from snapshots until
+    the question is closed. Time is server time only; `countdown.serverNow` lets clients correct clock skew.
+    Each socket is rate limited with a bucket of 10 events refilled at 5 per second (`RATE_LIMITED`).
+
+    A socket binds once: the first successful `host:join`, `player:join` or `player:rejoin` fixes whom it speaks
+    for, and any further join on the same socket (or one sent while a join is still in flight) is refused with
+    `FORBIDDEN`. A host starting another game, or a different player on the same device, needs a new socket.
+    Host commands from a socket not bound as the host, and `player:answer` from one not bound as a player, are
+    refused with `FORBIDDEN`. Commands for a game that no longer exists return `GAME_NOT_FOUND`.
+servers:
+  local:
+    host: localhost:3000
+    protocol: ws
+    description: Socket.io server, namespace `/game`.
+defaultContentType: application/json
+channels:
+  game:
+    address: /game
+    description: |
+      Socket.io namespace `/game`. Game state machine (`phase`):
+
+      `lobby` -> (`host:start`) -> `question_open` -> (deadline timer, or every connected player answered when
+      the quiz has `earlyClose`) -> `question_results` -> (`host:next` or auto-advance) -> `leaderboard` (every N
+      questions, N from quiz settings, 0 = only at the end) or the next `question_open` -> ... -> `finished`
+      with outcome `completed` after the last question. An open question cannot be closed by hand: `host:next`
+      during `question_open` is refused with `INVALID_PHASE`.
+
+      `pause` is orthogonal to `phase` and possible in `question_open`, `question_results` and `leaderboard`:
+      `host:pause` pauses with reason `host`; a host disconnect pauses with reason `host_disconnected` (and turns
+      an existing `host` pause into `host_disconnected`). When the host reconnects the reason becomes `host` and
+      the game stays paused until `host:resume`. While paused, the question deadline and auto-advance are frozen,
+      the question is hidden, answers are rejected (`PAUSED`) and active time does not grow. The 30-minute
+      host-absence timer keeps running during a pause: if the host does not return within 30 minutes a running
+      game finishes with outcome `aborted`, and a lobby is closed (`game:closed`).
+
+      `host:end` in the lobby closes it (`game:closed`); in any later phase it finishes the game with outcome
+      `aborted` (an open question is not scored).
+    messages:
+      host:join:
+        $ref: '#/components/messages/HostJoin'
+      host:start:
+        $ref: '#/components/messages/HostStart'
+      host:next:
+        $ref: '#/components/messages/HostNext'
+      host:pause:
+        $ref: '#/components/messages/HostPause'
+      host:resume:
+        $ref: '#/components/messages/HostResume'
+      host:kick:
+        $ref: '#/components/messages/HostKick'
+      host:end:
+        $ref: '#/components/messages/HostEnd'
+      player:lookup:
+        $ref: '#/components/messages/PlayerLookup'
+      player:join:
+        $ref: '#/components/messages/PlayerJoin'
+      player:rejoin:
+        $ref: '#/components/messages/PlayerRejoin'
+      player:answer:
+        $ref: '#/components/messages/PlayerAnswer'
+      host:state:
+        $ref: '#/components/messages/HostState'
+      player:state:
+        $ref: '#/components/messages/PlayerState'
+      player:kicked:
+        $ref: '#/components/messages/PlayerKicked'
+      game:closed:
+        $ref: '#/components/messages/GameClosed'
+operations:
+  sendHostCommand:
+    action: receive
+    channel:
+      $ref: '#/channels/game'
+    summary: Host commands (the server receives them)
+    messages:
+      - $ref: '#/channels/game/messages/host:join'
+      - $ref: '#/channels/game/messages/host:start'
+      - $ref: '#/channels/game/messages/host:next'
+      - $ref: '#/channels/game/messages/host:pause'
+      - $ref: '#/channels/game/messages/host:resume'
+      - $ref: '#/channels/game/messages/host:kick'
+      - $ref: '#/channels/game/messages/host:end'
+  sendPlayerCommand:
+    action: receive
+    channel:
+      $ref: '#/channels/game'
+    summary: Player commands (the server receives them)
+    messages:
+      - $ref: '#/channels/game/messages/player:lookup'
+      - $ref: '#/channels/game/messages/player:join'
+      - $ref: '#/channels/game/messages/player:rejoin'
+      - $ref: '#/channels/game/messages/player:answer'
+  receiveState:
+    action: send
+    channel:
+      $ref: '#/channels/game'
+    summary: State snapshots and notifications pushed by the server
+    messages:
+      - $ref: '#/channels/game/messages/host:state'
+      - $ref: '#/channels/game/messages/player:state'
+      - $ref: '#/channels/game/messages/player:kicked'
+      - $ref: '#/channels/game/messages/game:closed'
+components:
+  messages:
+    HostJoin:
+      name: host:join
+      summary: Attach the host socket to its game (also used to reconnect).
+      description: |
+        Needs the host session cookie on the handshake. Errors: `UNAUTHENTICATED` (no session), `GAME_NOT_FOUND`,
+        `NOT_HOST` (another host's game), `FORBIDDEN` (this socket is already bound), `INVALID_PAYLOAD`.
+      payload:
+        type: object
+        required: [gameId]
+        properties:
+          gameId:
+            type: string
+            minLength: 1
+            maxLength: 128
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostStart:
+      name: host:start
+      summary: Start the game from the lobby; `NO_PLAYERS` if nobody joined.
+      description: |
+        Errors: `NO_PLAYERS`, `INVALID_PHASE` (not in the lobby), `FORBIDDEN`.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostNext:
+      name: host:next
+      summary: Move on from `question_results` or `leaderboard` (to the leaderboard, the next question or finish).
+      description: |
+        Does not close an open question. Errors: `INVALID_PHASE` (`lobby`, `question_open`, `finished`),
+        `PAUSED`, `FORBIDDEN`.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostPause:
+      name: host:pause
+      summary: Pause the game.
+      description: |
+        Allowed in `question_open`, `question_results` and `leaderboard`. Errors: `INVALID_PHASE` (other phases),
+        `PAUSED` (already paused), `FORBIDDEN`.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostResume:
+      name: host:resume
+      summary: Resume a paused game (whatever the pause reason).
+      description: |
+        The question gets the time it had left when it was paused. Errors: `INVALID_PHASE` (not paused),
+        `FORBIDDEN`.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostKick:
+      name: host:kick
+      summary: Remove a player from the lobby; the player receives `player:kicked` and is disconnected.
+      description: |
+        Lobby only. A kicked player's nickname becomes free again. Errors: `INVALID_PHASE` (not in the lobby),
+        `INVALID_PAYLOAD` (unknown player), `FORBIDDEN`.
+      payload:
+        type: object
+        required: [playerId]
+        properties:
+          playerId:
+            type: string
+            minLength: 1
+            maxLength: 128
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostEnd:
+      name: host:end
+      summary: End the game early.
+      description: |
+        In the lobby the lobby is closed and everybody receives `game:closed`. Later the game finishes with outcome
+        `aborted` and is saved to history; an open question is not scored. Errors: `INVALID_PHASE` (already
+        finished), `FORBIDDEN`.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    PlayerLookup:
+      name: player:lookup
+      summary: Check a PIN before asking for a nickname.
+      description: |
+        Read-only: does not bind the socket to the game and changes no state (it still counts against the socket
+        rate limit). Errors: `GAME_NOT_FOUND`, `GAME_ALREADY_STARTED` (not in the lobby), `GAME_FULL` (50 players
+        who were not kicked), `INVALID_PAYLOAD`.
+      payload:
+        type: object
+        required: [pin]
+        properties:
+          pin:
+            type: string
+            pattern: '^\d{6}$'
+      x-ack:
+        oneOf:
+          - type: object
+            required: [ok, quizTitle]
+            properties:
+              ok:
+                const: true
+              quizTitle:
+                type: string
+          - $ref: '#/components/schemas/AckError'
+    PlayerJoin:
+      name: player:join
+      summary: Join a lobby by PIN with a nickname.
+      description: |
+        Nickname: 1-20 characters after trimming, inner whitespace collapsed, unique case-insensitively among
+        players who were not kicked. Errors: `GAME_NOT_FOUND`, `GAME_ALREADY_STARTED`, `GAME_FULL` (50 players),
+        `NICKNAME_TAKEN`, `INVALID_PAYLOAD`, `FORBIDDEN` (this socket is already bound).
+      payload:
+        type: object
+        required: [pin, nickname]
+        properties:
+          pin:
+            type: string
+            pattern: '^\d{6}$'
+          nickname:
+            type: string
+            description: 1-20 characters after trim and whitespace collapse.
+      x-ack:
+        oneOf:
+          - type: object
+            required: [ok, playerId, playerToken, gameId]
+            properties:
+              ok:
+                const: true
+              playerId:
+                type: string
+              playerToken:
+                type: string
+                description: Secret to store on the device and send with `player:rejoin`.
+              gameId:
+                type: string
+          - $ref: '#/components/schemas/AckError'
+    PlayerRejoin:
+      name: player:rejoin
+      summary: Reconnect an existing player by token.
+      description: |
+        Works in any phase, including `finished`. Errors: `INVALID_TOKEN`, `KICKED`, `GAME_NOT_FOUND`,
+        `FORBIDDEN` (this socket is already bound), `INVALID_PAYLOAD`.
+      payload:
+        type: object
+        required: [gameId, playerToken]
+        properties:
+          gameId:
+            type: string
+            minLength: 1
+            maxLength: 128
+          playerToken:
+            type: string
+            minLength: 1
+            maxLength: 128
+      x-ack:
+        oneOf:
+          - type: object
+            required: [ok, playerId]
+            properties:
+              ok:
+                const: true
+              playerId:
+                type: string
+          - $ref: '#/components/schemas/AckError'
+    PlayerAnswer:
+      name: player:answer
+      summary: Answer the open question.
+      description: |
+        One answer per player per question, immutable. The answer time is the server time at which the event
+        arrived. Errors: `QUESTION_CLOSED` (arrived at or after the deadline, for another question index, or for
+        a question already closed — the same code whether or not the server has moved on to the results yet),
+        `PAUSED` while paused, `ALREADY_ANSWERED`, `KICKED`, `INVALID_PHASE` (lobby, finished, or a question
+        that is not open yet), `INVALID_PAYLOAD` (answer kind or option does not fit the question), `FORBIDDEN`
+        (socket not bound as a player).
+      payload:
+        type: object
+        required: [questionIndex, answer]
+        properties:
+          questionIndex:
+            type: integer
+            minimum: 0
+            maximum: 99
+          answer:
+            $ref: '#/components/schemas/PlayerAnswer'
+      x-ack:
+        $ref: '#/components/schemas/Ack'
+    HostState:
+      name: host:state
+      summary: Full host view; sent on every change and after `host:join`.
+      payload:
+        $ref: '#/components/schemas/HostView'
+    PlayerState:
+      name: player:state
+      summary: Full player view; sent on every change and after join or rejoin.
+      payload:
+        $ref: '#/components/schemas/PlayerView'
+    PlayerKicked:
+      name: player:kicked
+      summary: The host removed this player; the socket is disconnected afterwards.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+    GameClosed:
+      name: game:closed
+      summary: The lobby was closed by `host:end` or because the host was absent for 30 minutes.
+      payload:
+        $ref: '#/components/schemas/EmptyPayload'
+  schemas:
+    EmptyPayload:
+      type: object
+      additionalProperties: false
+    ErrorCode:
+      type: string
+      enum:
+        - INVALID_PAYLOAD
+        - UNAUTHENTICATED
+        - FORBIDDEN
+        - NOT_FOUND
+        - CSRF_INVALID
+        - EMAIL_TAKEN
+        - INVALID_CREDENTIALS
+        - GAME_NOT_FOUND
+        - GAME_ALREADY_STARTED
+        - GAME_FULL
+        - NICKNAME_TAKEN
+        - INVALID_TOKEN
+        - KICKED
+        - NOT_HOST
+        - INVALID_PHASE
+        - PAUSED
+        - QUESTION_CLOSED
+        - ALREADY_ANSWERED
+        - NO_PLAYERS
+        - ACTIVE_GAME_EXISTS
+        - RATE_LIMITED
+        - IMAGE_TOO_LARGE
+        - IMAGE_TYPE_UNSUPPORTED
+        - INTERNAL_ERROR
+    AckError:
+      type: object
+      required: [ok, code]
+      properties:
+        ok:
+          const: false
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    Ack:
+      oneOf:
+        - type: object
+          required: [ok]
+          properties:
+            ok:
+              const: true
+        - $ref: '#/components/schemas/AckError'
+    PlayerAnswer:
+      oneOf:
+        - type: object
+          required: [kind, option]
+          properties:
+            kind:
+              const: option
+            option:
+              type: integer
+              minimum: 0
+              maximum: 3
+        - type: object
+          required: [kind, value]
+          properties:
+            kind:
+              const: numeric
+            value:
+              type: number
+    GamePhase:
+      type: string
+      enum: [lobby, question_open, question_results, leaderboard, finished]
+    GameOutcome:
+      type: [string, 'null']
+      enum: [completed, aborted, null]
+      description: Set only in `finished`.
+    PauseView:
+      type:
+        - object
+        - 'null'
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          enum: [host, host_disconnected]
+    QuestionPublic:
+      type:
+        - object
+        - 'null'
+      description: The open question without the correct answer.
+      required: [index, type, text, imageUrl, options, timeLimitSeconds, multiplier]
+      properties:
+        index:
+          type: integer
+        type:
+          type: string
+          enum: [single_choice, true_false, numeric]
+        text:
+          type: string
+        imageUrl:
+          type: [string, 'null']
+        options:
+          type: array
+          items:
+            type: string
+        timeLimitSeconds:
+          type: integer
+        multiplier:
+          type: integer
+          enum: [1, 2, 3]
+    Countdown:
+      type:
+        - object
+        - 'null'
+      required: [closesAt, remainingMs, serverNow]
+      properties:
+        closesAt:
+          type: [integer, 'null']
+          description: Server epoch ms of the deadline; null while paused.
+        remainingMs:
+          type: integer
+        serverNow:
+          type: integer
+          description: Server epoch ms when the snapshot was built.
+    QuestionResults:
+      type:
+        - object
+        - 'null'
+      description: Present once the question is closed.
+      required: [correctOption, numericAnswer, numericTolerance, optionCounts, closestNumeric, noAnswerCount]
+      properties:
+        correctOption:
+          type: [integer, 'null']
+        numericAnswer:
+          type: [number, 'null']
+        numericTolerance:
+          type: [number, 'null']
+        optionCounts:
+          type: [array, 'null']
+          items:
+            type: integer
+        closestNumeric:
+          type: [array, 'null']
+          description: Top 3 answers for numeric questions.
+          items:
+            type: object
+            required: [nickname, value]
+            properties:
+              nickname:
+                type: string
+              value:
+                type: number
+        noAnswerCount:
+          type: integer
+    LeaderboardEntry:
+      type: object
+      required: [playerId, nickname, score, rank]
+      properties:
+        playerId:
+          type: string
+        nickname:
+          type: string
+        score:
+          type: integer
+        rank:
+          type: integer
+          minimum: 1
+    Leaderboard:
+      type: [array, 'null']
+      items:
+        $ref: '#/components/schemas/LeaderboardEntry'
+    HostView:
+      type: object
+      required:
+        - gameId
+        - pin
+        - joinUrl
+        - phase
+        - pause
+        - quizTitle
+        - questionIndex
+        - questionCount
+        - question
+        - countdown
+        - answeredCount
+        - players
+        - results
+        - leaderboard
+        - outcome
+        - advanceMode
+        - autoAdvance
+      properties:
+        gameId:
+          type: string
+        pin:
+          type: string
+        joinUrl:
+          type: string
+        phase:
+          $ref: '#/components/schemas/GamePhase'
+        pause:
+          $ref: '#/components/schemas/PauseView'
+        quizTitle:
+          type: string
+        questionIndex:
+          type: integer
+        questionCount:
+          type: integer
+        question:
+          $ref: '#/components/schemas/QuestionPublic'
+        countdown:
+          $ref: '#/components/schemas/Countdown'
+        answeredCount:
+          type: integer
+        players:
+          type: array
+          items:
+            type: object
+            required: [id, nickname, connected, score, answered]
+            properties:
+              id:
+                type: string
+              nickname:
+                type: string
+              connected:
+                type: boolean
+              score:
+                type: integer
+              answered:
+                type: boolean
+        results:
+          $ref: '#/components/schemas/QuestionResults'
+        leaderboard:
+          $ref: '#/components/schemas/Leaderboard'
+        outcome:
+          $ref: '#/components/schemas/GameOutcome'
+        advanceMode:
+          type: string
+          enum: [manual, auto]
+        autoAdvance:
+          description: |
+            Countdown to the automatic move on. Not null only in `auto` mode, in `question_results` or
+            `leaderboard`, while not paused.
+          $ref: '#/components/schemas/Countdown'
+    PlayerView:
+      type: object
+      required:
+        - phase
+        - pause
+        - quizTitle
+        - questionIndex
+        - questionCount
+        - question
+        - countdown
+        - me
+        - answered
+        - myAnswer
+        - playerCount
+        - myResult
+        - podium
+        - outcome
+      properties:
+        phase:
+          $ref: '#/components/schemas/GamePhase'
+        pause:
+          $ref: '#/components/schemas/PauseView'
+        quizTitle:
+          type: string
+        questionIndex:
+          type: integer
+        questionCount:
+          type: integer
+        question:
+          $ref: '#/components/schemas/QuestionPublic'
+        countdown:
+          $ref: '#/components/schemas/Countdown'
+        me:
+          type: object
+          required: [id, nickname, score, rank]
+          properties:
+            id:
+              type: string
+            nickname:
+              type: string
+            score:
+              type: integer
+            rank:
+              type: [integer, 'null']
+        answered:
+          type: boolean
+        myAnswer:
+          description: |
+            The player's own accepted answer to the visible question (`question_open`, `question_results`);
+            null otherwise and while paused. Never reveals correctness.
+          oneOf:
+            - $ref: '#/components/schemas/PlayerAnswer'
+            - type: 'null'
+        playerCount:
+          type: integer
+          description: Players who were not kicked.
+        myResult:
+          type:
+            - object
+            - 'null'
+          required: [correct, points]
+          properties:
+            correct:
+              type: boolean
+            points:
+              type: integer
+        podium:
+          $ref: '#/components/schemas/Leaderboard'
+        outcome:
+          $ref: '#/components/schemas/GameOutcome'

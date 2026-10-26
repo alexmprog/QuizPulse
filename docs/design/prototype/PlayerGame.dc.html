@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — пульт игрока: игра</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 3009px; height: 2684px">
+<h1 class="board-title">Пульт · игра <span>лобби, кнопки ответа, числовой ввод, «Ответ принят», пауза</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. Lobby wait -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 20px">
+<div class="row-c" style="justify-content: space-between"><span class="logo" style="font-size: 16px"><span class="logo-mark" style="width: 26px; height: 26px; padding: 5px"><i></i><i></i><i></i><i></i></span>QuizPulse</span><span class="muted tnum" style="font-size: 13px; font-weight: 600">PIN 482 913</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 18px">
+<span class="avatar" style="width: 96px; height: 96px; font-size: 40px">{{v.initial}}</span>
+<div class="display" style="font-size: 30px">{{v.nick}}</div>
+<span class="badge badge-success" style="height: 30px; font-size: 14px"><span class="dot"></span>{{v.s.inGame}}</span>
+<p class="muted" style="margin: 0; font-size: 17px; max-width: 280px">{{v.s.waitHost}}</p>
+</div>
+<div class="card" style="padding: 14px 16px; text-align: center"><span class="muted" style="font-size: 13px">{{v.s.game}}</span><div style="font-weight: 700">{{v.quiz}}</div></div>
+</div>
+</div>
+
+<!-- 2. Answer: 4 options -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{v.nick}} · <span class="tnum">{{v.score}}</span></span><span class="badge tnum">3 / 12</span></div>
+<div class="row-c" style="gap: 10px"><div class="bar" style="flex: 1"><i style="width: 58%"></i></div><span class="display tnum" style="font-size: 16px; width: 36px; text-align: right">17</span></div>
+<p class="muted" style="margin: 0; font-size: 14px; text-align: center">{{v.s.lookScreen}}</p>
+<sc-for list="{{v.opts}}" as="o" hint-placeholder-count="4">
+<button class="opt {{o.slot}}" style="flex: 1; font-size: 20px; min-height: 64px"><span class="shape {{o.shape}}" style="width: 32px; height: 32px"></span>{{o.text}}</button>
+</sc-for>
+</div>
+</div>
+
+<!-- 3. True / false -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}} · <span class="tnum">{{v.score}}</span></span><span class="badge tnum">2 / 12</span></div>
+<div class="row-c" style="gap: 10px"><div class="bar" style="flex: 1"><i style="width: 85%"></i></div><span class="display tnum" style="font-size: 16px; width: 36px; text-align: right">17</span></div>
+<p class="muted" style="margin: 0; font-size: 14px; text-align: center">{{v.s.lookScreen}}</p>
+<button class="opt opt-b" style="flex: 1; font-size: 28px; justify-content: center"><span class="shape dia" style="width: 40px; height: 40px"></span>{{v.s.tTrue}}</button>
+<button class="opt opt-a" style="flex: 1; font-size: 28px; justify-content: center"><span class="shape tri" style="width: 40px; height: 40px"></span>{{v.s.tFalse}}</button>
+</div>
+</div>
+
+<!-- 4. Numeric input -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap4}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}} · <span class="tnum">{{v.score}}</span></span><span class="row-c" style="gap: 6px"><span class="badge badge-accent">x2</span><span class="badge tnum">4 / 12</span></span></div>
+<div class="row-c" style="gap: 10px"><div class="bar" style="flex: 1"><i style="width: 30%"></i></div><span class="display tnum" style="font-size: 16px; width: 36px; text-align: right">6</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px">
+<label class="field"><span class="label" style="font-size: 15px; text-align: center">{{v.s.yourNumber}}</span><input class="input input-lg focus tnum" inputmode="decimal" value="142" style="height: 88px; font-size: 44px"></label>
+<button class="btn btn-primary btn-lg btn-block">{{v.s.answer}}</button>
+<p class="hint" style="margin: 0; text-align: center">{{v.s.once}}</p>
+</div>
+</div>
+</div>
+
+<!-- 5. Accepted -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap5}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}} · <span class="tnum">{{v.score}}</span></span><span class="badge tnum">3 / 12</span></div>
+<div class="row-c" style="gap: 10px"><div class="bar" style="flex: 1"><i style="width: 40%"></i></div><span class="display tnum" style="font-size: 16px; width: 36px; text-align: right">12</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 18px">
+<div style="width: 112px; height: 112px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 28px">{{v.s.accepted}}</h1>
+<div class="opt opt-a" style="height: 56px; font-size: 18px; width: auto; cursor: default"><span class="shape tri" style="width: 24px; height: 24px"></span>{{v.chosen}}</div>
+<p class="muted" style="margin: 0; font-size: 16px">{{v.s.acceptedSub}}</p>
+</div>
+</div>
+</div>
+
+<!-- 6. Pause by host -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap6}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}} · <span class="tnum">{{v.score}}</span></span><span class="badge tnum">3 / 12</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 18px">
+<div style="width: 112px; height: 112px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center"><svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></div>
+<h1 class="display" style="margin: 0; font-size: 32px">{{v.s.paused}}</h1>
+<p class="muted" style="margin: 0; font-size: 16px; max-width: 300px">{{v.s.pausedSub}}</p>
+</div>
+</div>
+</div>
+
+<!-- 7. Pause: host disconnected -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap7}}</div>
+<div class="phone {{v.cls}}" style="display: flex; flex-direction: column; padding: 16px; gap: 12px">
+<div class="row-c" style="justify-content: space-between; gap: 8px"><span style="font-weight: 700">{{v.nick}} · <span class="tnum">{{v.score}}</span></span><span class="badge tnum">3 / 12</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 18px">
+<div style="width: 112px; height: 112px; border-radius: 50%; background: var(--warning-soft); color: var(--warning); display: grid; place-items: center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4M3 3l18 18"></path></svg></div>
+<h1 class="display" style="margin: 0; font-size: 28px">{{v.s.hostGone}}</h1>
+<p class="muted" style="margin: 0; font-size: 16px; max-width: 300px">{{v.s.hostGoneSub}}</p>
+</div>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":3009,"height":2684}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'Лобби: ожидание старта', cap2: 'Ответ: 4 варианта', cap3: 'Ответ: правда / ложь', cap4: 'Ответ: число', cap5: 'Ответ принят',
+        cap6: 'Пауза (ведущий)', cap7: 'Пауза (ведущий отключился)',
+        inGame: 'Вы в игре', waitHost: 'Ждём, когда ведущий начнёт. Вопросы появятся на большом экране.', game: 'Игра',
+        lookScreen: 'Вопрос — на большом экране', tTrue: 'Правда', tFalse: 'Ложь',
+        yourNumber: 'Ваш ответ — число', answer: 'Ответить', once: 'Ответ можно отправить один раз',
+        accepted: 'Ответ принят', acceptedSub: 'Верно или нет — узнаете, когда время выйдет.',
+        paused: 'Пауза', pausedSub: 'Ведущий поставил игру на паузу. Вопрос скрыт, время остановлено.',
+        hostGone: 'Ждём ведущего', hostGoneSub: 'Экран ведущего отключился. Игра на паузе, ваши очки сохранены.'
+      },
+      en: {
+        cap1: 'Lobby: waiting for start', cap2: 'Answer: 4 options', cap3: 'Answer: true / false', cap4: 'Answer: number', cap5: 'Answer accepted',
+        cap6: 'Paused (host)', cap7: 'Paused (host disconnected)',
+        inGame: 'You’re in', waitHost: 'Waiting for the host to start. Questions appear on the big screen.', game: 'Game',
+        lookScreen: 'The question is on the big screen', tTrue: 'True', tFalse: 'False',
+        yourNumber: 'Your answer — a number', answer: 'Submit', once: 'You can answer only once',
+        accepted: 'Answer locked in', acceptedSub: 'You’ll find out if it’s right when time runs out.',
+        paused: 'Paused', pausedSub: 'The host paused the game. The question is hidden and the timer is stopped.',
+        hostGone: 'Waiting for the host', hostGoneSub: 'The host screen disconnected. The game is paused and your score is safe.'
+      }
+    };
+    var opts = { ru: ['Киану Ривз', 'Брэд Питт', 'Том Круз', 'Джонни Депп'], en: ['Keanu Reeves', 'Brad Pitt', 'Tom Cruise', 'Johnny Depp'] };
+    var slots = [['opt-a', 'tri'], ['opt-b', 'dia'], ['opt-c', 'cir'], ['opt-d', 'sq']];
+    var mk = function (cls, lang, label) {
+      var en = lang === 'en';
+      var nick = en ? 'Whiskers' : 'Мурзик';
+      return {
+        cls: cls, label: label, s: S[lang], nick: nick, initial: nick.charAt(0), score: en ? '1,840' : '1 840',
+        quiz: en ? 'Movies of the 90s' : 'Кино 90-х', chosen: opts[lang][0],
+        opts: opts[lang].map(function (t, i) { return { text: t, slot: slots[i][0], shape: slots[i][1] }; })
+      };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

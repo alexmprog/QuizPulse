@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>QuizPulse — результаты вопроса и лидерборд</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/dd30bbfa04cec523612a325d30362982">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#5B3BEF}a:hover{color:#4B2BDB}
+</style>
+</helmet>
+<div class="board" style="width: 4032px; height: 2564px">
+<h1 class="board-title">Большой экран · результаты <span>phase = question_results / leaderboard · распределение, ближайшие числа, топ-10</span></h1>
+<div class="rows">
+<sc-for list="{{variants}}" as="v" hint-placeholder-count="3">
+<div class="vrow">
+
+<!-- 1. Choice results -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap1}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 3 / 12</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 4px 32px 20px; min-height: 0">
+<h2 class="display" style="margin: 0; font-size: 32px; text-align: center">{{v.q1}}</h2>
+<div style="flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: end">
+<sc-for list="{{v.bars}}" as="b" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 10px; align-items: stretch">
+<div class="display tnum" style="text-align: center; font-size: 40px">{{b.count}}</div>
+<div class="{{b.fill}}" style="height: {{b.h}}; border-radius: 12px 12px 4px 4px; opacity: {{b.op}}"></div>
+<div style="height: 76px; border-radius: 14px; display: flex; align-items: center; gap: 12px; padding: 0 16px; font-weight: 700; font-size: 21px; background: {{b.tileBg}}; color: {{b.tileInk}}">
+<span class="shape {{b.shape}} {{b.ink}}" style="width: 28px; height: 28px; color: {{b.shapeInk}}"></span>
+<span style="flex: 1; min-width: 0">{{b.text}}</span>
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true" style="display: {{b.check}}; flex: none"><path d="M5 12l5 5 9-10"></path></svg>
+</div>
+</div>
+</sc-for>
+</div>
+<div class="muted" style="text-align: center; font-size: 18px; font-weight: 600">{{v.s.noAnswer}}: 2</div>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.s.nextIsLb}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg">{{v.s.pause}}</button>
+<button class="btn btn-primary btn-xl">{{v.s.next}} →</button>
+</footer>
+</div>
+</div>
+
+<!-- 2. Numeric results, auto advance -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap2}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.q}} 4 / 12</span>
+<span class="badge badge-accent" style="height: 32px; font-size: 16px; padding: 0 14px">x2</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; gap: 40px; padding: 8px 48px 24px; min-height: 0; align-items: center">
+<section style="flex: 1; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 24px; font-weight: 600" class="muted">{{v.q4}}</h2>
+<div class="label muted" style="font-size: 16px; text-transform: uppercase; letter-spacing: .08em; margin-top: 18px">{{v.s.correct}}</div>
+<div class="display tnum" style="font-size: 136px; line-height: 1; color: var(--success)">142</div>
+<span class="badge badge-success" style="height: 36px; font-size: 18px; padding: 0 16px; align-self: flex-start">{{v.s.tol}} ±5</span>
+<div class="muted" style="font-size: 18px; font-weight: 600; margin-top: 10px">{{v.s.noAnswer}}: 2</div>
+</section>
+<section class="card" style="width: 520px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h3 class="display" style="margin: 0 0 4px; font-size: 22px">{{v.s.closest}}</h3>
+<sc-for list="{{v.closest}}" as="c" hint-placeholder-count="3">
+<div class="row-c" style="gap: 14px; height: 64px; padding: 0 16px; border-radius: 14px; background: var(--surface-2)">
+<span class="display tnum" style="width: 28px; font-size: 22px">{{c.rank}}</span>
+<span style="flex: 1; font-size: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.nick}}</span>
+<span class="display tnum" style="font-size: 24px">{{c.value}}</span>
+<span class="badge {{c.badge}} tnum" style="height: 28px; font-size: 14px; min-width: 64px; justify-content: center">{{c.diff}}</span>
+</div>
+</sc-for>
+</section>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 16px; border-top: 1px solid var(--border); background: var(--surface)">
+<div style="width: 280px; display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 600; font-size: 15px">{{v.s.autoNext}}</span><div class="bar"><i style="width: 25%"></i></div></div>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg">{{v.s.pause}}</button>
+<button class="btn btn-primary btn-xl">{{v.s.next}} →</button>
+</footer>
+</div>
+</div>
+
+<!-- 3. Leaderboard -->
+<div class="cell">
+<div class="cap"><b>{{v.label}}</b> · {{v.s.cap3}}</div>
+<div class="screen {{v.cls}}" style="width: 1280px; height: 720px; display: flex; flex-direction: column">
+<header class="row-c" style="height: 64px; flex: none; padding: 0 32px; gap: 14px">
+<span class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>QuizPulse</span>
+<span class="badge tnum" style="height: 32px; font-size: 16px; padding: 0 14px">{{v.s.after3}}</span>
+<span class="muted tnum" style="margin-left: auto; font-size: 16px; font-weight: 600">PIN 482 913</span>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 0 160px 16px; min-height: 0">
+<h2 class="display" style="margin: 0 0 8px; font-size: 32px; text-align: center">{{v.s.lb}}</h2>
+<sc-for list="{{v.top}}" as="r" hint-placeholder-count="10">
+<div class="row-c" style="gap: 18px; height: 42px; padding: 0 18px; border-radius: 12px; background: {{r.bg}}">
+<span class="display tnum" style="width: 36px; height: 32px; border-radius: 9px; display: grid; place-items: center; font-size: 17px; background: {{r.medal}}; color: {{r.medalInk}}">{{r.rank}}</span>
+<span style="flex: 1; font-size: 22px; font-weight: 600">{{r.nick}}</span>
+<span class="display tnum" style="font-size: 22px">{{r.score}}</span>
+</div>
+</sc-for>
+</main>
+<footer class="row-c" style="height: 80px; flex: none; padding: 0 32px; gap: 12px; border-top: 1px solid var(--border); background: var(--surface)">
+<span class="muted" style="font-size: 15px">{{v.s.lbHint}}</span>
+<button class="btn btn-danger-ghost btn-lg" style="margin-left: auto">{{v.s.end}}</button>
+<button class="btn btn-lg">{{v.s.pause}}</button>
+<button class="btn btn-primary btn-xl">{{v.s.nextQ}} →</button>
+</footer>
+</div>
+</div>
+
+</div>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":4032,"height":2564}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var S = {
+      ru: {
+        cap1: 'Результаты: варианты · переход вручную', cap2: 'Результаты: число · авто-переход', cap3: 'Лидерборд, топ-10',
+        q: 'Вопрос', noAnswer: 'Не ответили', nextIsLb: 'Дальше — лидерборд (каждые 3 вопроса)',
+        end: 'Завершить досрочно', pause: 'Пауза', next: 'Далее', nextQ: 'Вопрос 4',
+        correct: 'Верный ответ', tol: 'допуск', closest: 'Ближе всех',
+        autoNext: 'Следующий вопрос через 6 с', after3: 'После вопроса 3 из 12', lb: 'Лидерборд',
+        lbHint: 'Показан топ-10 из 14. Своё место каждый видит на телефоне.'
+      },
+      en: {
+        cap1: 'Results: choice · manual advance', cap2: 'Results: number · auto advance', cap3: 'Leaderboard, top 10',
+        q: 'Question', noAnswer: 'No answer', nextIsLb: 'Leaderboard comes next (every 3 questions)',
+        end: 'End early', pause: 'Pause', next: 'Next', nextQ: 'Question 4',
+        correct: 'Correct answer', tol: 'tolerance', closest: 'Closest guesses',
+        autoNext: 'Next question in 6 s', after3: 'After question 3 of 12', lb: 'Leaderboard',
+        lbHint: 'Top 10 of 14 shown. Everyone sees their own place on their phone.'
+      }
+    };
+    var C = {
+      ru: { q1: 'Кто сыграл Нео в «Матрице»?', q4: 'Сколько минут длится «Форрест Гамп»?', opts: ['Киану Ривз', 'Брэд Питт', 'Том Круз', 'Джонни Депп'],
+        closest: [['Аня', '141', '−1', 1], ['Команда «Сова»', '145', '+3', 1], ['Лис', '150', '+8', 0]],
+        top: [['Мурзик', '2 840'], ['Команда «Сова»', '2 615'], ['Аня', '2 470'], ['Капитан Очевидность', '2 120'], ['Пельмень', '1 980'], ['Dmitry', '1 760'], ['Лис', '1 540'], ['Стол №5', '1 205'], ['Бабушка Зина', '990'], ['Ёжик', '640']] },
+      en: { q1: 'Who played Neo in The Matrix?', q4: 'How long is Forrest Gump, in minutes?', opts: ['Keanu Reeves', 'Brad Pitt', 'Tom Cruise', 'Johnny Depp'],
+        closest: [['Anna', '141', '−1', 1], ['Team Owl', '145', '+3', 1], ['Fox', '150', '+8', 0]],
+        top: [['Whiskers', '2,840'], ['Team Owl', '2,615'], ['Anna', '2,470'], ['Captain Obvious', '2,120'], ['Dumpling', '1,980'], ['Dmitry', '1,760'], ['Fox', '1,540'], ['Table 5', '1,205'], ['Grandma Zina', '990'], ['Hedgehog', '640']] }
+    };
+    var slots = [['fill-a', 'tri', 'ink-a', '#FFFFFF'], ['fill-b', 'dia', 'ink-b', '#FFFFFF'], ['fill-c', 'cir', 'ink-c', '#1E1600'], ['fill-d', 'sq', 'ink-d', '#FFFFFF']];
+    var counts = [9, 2, 1, 0];
+    var medals = [['var(--gold)', '#1E1600'], ['var(--silver)', '#14161A'], ['var(--bronze)', '#1E1000']];
+    var mk = function (cls, lang, label) {
+      var c = C[lang];
+      return {
+        cls: cls, label: label, s: S[lang], q1: c.q1, q4: c.q4,
+        bars: c.opts.map(function (t, i) {
+          var ok = i === 0;
+          return {
+            text: t, count: counts[i], fill: slots[i][0], shape: slots[i][1], ink: slots[i][2],
+            h: Math.max(6, Math.round(counts[i] / 9 * 200)) + 'px', op: ok ? 1 : 0.35,
+            tileBg: ok ? 'var(--opt-' + 'abcd'[i] + ')' : 'var(--surface-2)', tileInk: ok ? slots[i][3] : 'var(--text)',
+            shapeInk: ok ? slots[i][3] : 'var(--opt-' + 'abcd'[i] + ')', check: ok ? 'block' : 'none'
+          };
+        }),
+        closest: c.closest.map(function (x, i) { return { rank: i + 1, nick: x[0], value: x[1], diff: x[2], badge: x[3] ? 'badge-success' : '' }; }),
+        top: c.top.map(function (x, i) {
+          var m = medals[i];
+          return { rank: i + 1, nick: x[0], score: x[1], medal: m ? m[0] : 'var(--surface-2)', medalInk: m ? m[1] : 'var(--text)', bg: i < 3 ? 'var(--surface)' : 'transparent' };
+        })
+      };
+    };
+    return { variants: [mk('qp', 'ru', 'RU · светлая'), mk('qp dark', 'ru', 'RU · тёмная'), mk('qp', 'en', 'EN · светлая')] };
+  }
+}
+</script>
+</body>
+</html>

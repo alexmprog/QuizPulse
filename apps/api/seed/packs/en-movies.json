@@ -1,0 +1,146 @@
+{
+  "packKey": "en-movies",
+  "language": "en",
+  "title": "Movies & TV",
+  "settings": {
+    "advanceMode": "manual",
+    "autoAdvanceSeconds": 8,
+    "defaultTimeLimitSeconds": 20,
+    "earlyClose": true,
+    "leaderboardEvery": 5
+  },
+  "questions": [
+    {
+      "type": "single_choice",
+      "text": "Who directed the 1975 film Jaws?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Steven Spielberg", "George Lucas", "Ridley Scott", "Francis Ford Coppola"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Alfred Hitchcock directed the film Psycho.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Which film won the Academy Award for Best Picture in 2020?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["1917", "Joker", "Parasite", "Once Upon a Time in Hollywood"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "In what year was the first Star Wars film released?",
+      "imageId": null,
+      "timeLimitSeconds": 25,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 1977,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Which actor played Jack Dawson in Titanic (1997)?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Brad Pitt", "Leonardo DiCaprio", "Matt Damon", "Johnny Depp"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "The film The Matrix was released in 2010.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Which TV series features the Iron Throne?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["The Witcher", "Vikings", "The Last Kingdom", "Game of Thrones"],
+      "correctOption": 3,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "How many seasons does the TV series Friends have?",
+      "imageId": null,
+      "timeLimitSeconds": 20,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 10,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "In which city is the TV series Friends set?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["New York", "Los Angeles", "Chicago", "Boston"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Breaking Bad is set in New Mexico.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Which studio produced the first Toy Story film?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 2,
+      "options": ["DreamWorks", "Pixar", "Illumination", "Blue Sky"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "How many films are in the main Harry Potter series?",
+      "imageId": null,
+      "timeLimitSeconds": 25,
+      "multiplier": 3,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 8,
+      "numericTolerance": 0
+    }
+  ]
+}

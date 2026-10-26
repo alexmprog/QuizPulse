@@ -1,0 +1,146 @@
+{
+  "packKey": "ru-movies",
+  "language": "ru",
+  "title": "Кино и сериалы",
+  "settings": {
+    "advanceMode": "manual",
+    "autoAdvanceSeconds": 8,
+    "defaultTimeLimitSeconds": 20,
+    "earlyClose": true,
+    "leaderboardEvery": 5
+  },
+  "questions": [
+    {
+      "type": "single_choice",
+      "text": "Кто режиссёр фильма «Ирония судьбы, или С лёгким паром!»?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Эльдар Рязанов", "Леонид Гайдай", "Георгий Данелия", "Никита Михалков"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Фильм «Титаник» вышел на экраны в 1997 году.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Какой актёр сыграл Шерлока Холмса в сериале BBC «Шерлок»?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Бенедикт Камбербэтч", "Роберт Дауни-младший", "Джуд Лоу", "Мартин Фриман"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "Сколько премий «Оскар» получил фильм «Титаник»?",
+      "imageId": null,
+      "timeLimitSeconds": 25,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 11,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Какая студия выпустила мультфильм «В поисках Немо»?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["DreamWorks", "Disney Channel", "Pixar", "Sony Pictures Animation"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Режиссёр фильма «Криминальное чтиво» — Мартин Скорсезе.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Кто снял фильм «Начало» (Inception)?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Дени Вильнёв", "Кристофер Нолан", "Дэвид Финчер", "Квентин Тарантино"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "Сколько фильмов в основной серии о Гарри Поттере?",
+      "imageId": null,
+      "timeLimitSeconds": 25,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 8,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "О каком герое рассказывает сериал «Во все тяжкие»?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Тони Сопрано", "Дон Дрейпер", "Декстер Морган", "Уолтер Уайт"],
+      "correctOption": 3,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Мультфильм «Шрек» создала студия DreamWorks.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Кто автор книги, по которой снята трилогия «Властелин колец»?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 2,
+      "options": ["Дж. Р. Р. Толкин", "К. С. Льюис", "Дж. К. Роулинг", "Дж. Р. Р. Мартин"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "В каком году вышел первый фильм о Гарри Поттере?",
+      "imageId": null,
+      "timeLimitSeconds": 25,
+      "multiplier": 3,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 2001,
+      "numericTolerance": 0
+    }
+  ]
+}

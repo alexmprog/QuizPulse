@@ -1,0 +1,24 @@
+{"v":3,"createdOnFiles":{"v":1,"at":"2026-10-23T12:00:00Z"},"title":"QuizPulse — дизайн веб-клиента","launch":{"view":"canvas"},"pages":[],
+"boards":{
+"Main.dc.html":{"x":0,"y":0,"w":1600,"h":1900,"title":"Основа: токены, шрифты, варианты ответа"},
+"Auth.dc.html":{"x":1680,"y":0,"w":2704,"h":2564,"title":"Аккаунт: вход и регистрация"},
+"StudioMain.dc.html":{"x":0,"y":2964,"w":5360,"h":2804,"title":"Студия: квизы, паки, история, детали игры"},
+"StudioEditor.dc.html":{"x":5440,"y":2964,"w":2704,"h":3104,"title":"Студия: редактор квиза"},
+"HostLobby.dc.html":{"x":0,"y":6468,"w":2704,"h":2564,"title":"Большой экран: лобби"},
+"HostQuestion.dc.html":{"x":2784,"y":6468,"w":5360,"h":2564,"title":"Большой экран: вопрос и пауза"},
+"HostResults.dc.html":{"x":8224,"y":6468,"w":4032,"h":2564,"title":"Большой экран: результаты и лидерборд"},
+"HostFinal.dc.html":{"x":12336,"y":6468,"w":4032,"h":2564,"title":"Большой экран: финал и досрочное завершение"},
+"PlayerJoin.dc.html":{"x":0,"y":9432,"w":2163,"h":2684,"title":"Пульт: вход в игру"},
+"PlayerGame.dc.html":{"x":2243,"y":9432,"w":3009,"h":2684,"title":"Пульт: лобби, ответ, пауза"},
+"PlayerResult.dc.html":{"x":5332,"y":9432,"w":3009,"h":2684,"title":"Пульт: результаты, финал, системные состояния"},
+"Extras.dc.html":{"x":0,"y":12516,"w":4358,"h":2700,"title":"Дополнительные состояния: PIN, время вышло, картинка, связь ведущего"}
+},
+"order":["Main.dc.html","Auth.dc.html","StudioMain.dc.html","StudioEditor.dc.html","HostLobby.dc.html","HostQuestion.dc.html","HostResults.dc.html","HostFinal.dc.html","PlayerJoin.dc.html","PlayerGame.dc.html","PlayerResult.dc.html","Extras.dc.html"],
+"notes":{
+"t0":{"x":0,"y":-300,"text":"Основа и аккаунт","kind":"title1","maxW":4384},
+"t1":{"x":0,"y":2664,"text":"Студия ведущего (/studio)","kind":"title1","maxW":8144},
+"t2":{"x":0,"y":6168,"text":"Большой экран ведущего (/host/:gameId)","kind":"title1","maxW":16368},
+"t3":{"x":0,"y":9132,"text":"Пульт игрока (/play), 375 px","kind":"title1","maxW":8341},
+"t4":{"x":0,"y":12216,"text":"Дополнительные состояния","kind":"title1","maxW":4358}
+},
+"designSystems":[]}

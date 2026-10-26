@@ -1,0 +1,33 @@
+{
+  "name": "quizpulse",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm contracts:check",
+    "format": "./format-all.sh",
+    "format:check": "./format-all.sh --check",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "gen": "openapi-typescript contracts/openapi.yaml -o packages/api-types/src/generated.ts",
+    "contracts:check": "redocly lint contracts/openapi.yaml --config contracts/redocly.yaml && SUPPRESS_NO_CONFIG_WARNING=1 asyncapi validate contracts/asyncapi.yaml && ./tools/contracts/check-generated.sh",
+    "e2e": "pnpm --filter @quizpulse/web e2e"
+  },
+  "devDependencies": {
+    "@asyncapi/cli": "6.2.1",
+    "@eslint/js": "10.0.1",
+    "@redocly/cli": "2.69.0",
+    "@types/node": "26.6.5",
+    "eslint": "10.13.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "openapi-typescript": "7.13.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0",
+    "vitest": "5.0.5"
+  }
+}

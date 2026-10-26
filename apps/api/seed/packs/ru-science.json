@@ -1,0 +1,146 @@
+{
+  "packKey": "ru-science",
+  "language": "ru",
+  "title": "Наука и природа",
+  "settings": {
+    "advanceMode": "manual",
+    "autoAdvanceSeconds": 8,
+    "defaultTimeLimitSeconds": 20,
+    "earlyClose": true,
+    "leaderboardEvery": 5
+  },
+  "questions": [
+    {
+      "type": "single_choice",
+      "text": "Какой газ преобладает в атмосфере Земли?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Азот", "Кислород", "Углекислый газ", "Аргон"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Звук распространяется в вакууме.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Какая планета самая большая в Солнечной системе?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Сатурн", "Нептун", "Юпитер", "Уран"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "Сколько хромосом в клетках тела человека?",
+      "imageId": null,
+      "timeLimitSeconds": 30,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 46,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Кто открыл закон всемирного тяготения?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Альберт Эйнштейн", "Исаак Ньютон", "Галилео Галилей", "Никола Тесла"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Сердце человека состоит из четырёх камер.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Какое млекопитающее самое крупное на Земле?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Слон", "Кашалот", "Белый медведь", "Синий кит"],
+      "correctOption": 3,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "При какой температуре в °C вода кипит при нормальном давлении?",
+      "imageId": null,
+      "timeLimitSeconds": 20,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 100,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Какой химический элемент обозначается символом Fe?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Железо", "Фтор", "Фосфор", "Франций"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Алмаз и графит состоят из одного химического элемента — углерода.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Какая наука изучает растения?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 2,
+      "options": ["Зоология", "Ботаника", "Геология", "Микология"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "Сколько ног у паука?",
+      "imageId": null,
+      "timeLimitSeconds": 20,
+      "multiplier": 3,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 8,
+      "numericTolerance": 0
+    }
+  ]
+}

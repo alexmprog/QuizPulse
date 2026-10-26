@@ -1,0 +1,18 @@
+packages:
+  - packages/*
+  - apps/*
+allowBuilds:
+  esbuild: false
+  argon2: true
+  '@asyncapi/cli': false
+  '@hyperjump/json-pointer': false
+  '@hyperjump/json-schema': false
+  '@hyperjump/json-schema-core': false
+  '@hyperjump/pact': false
+  '@scarf/scarf': false
+  yarn: false
+  '@swc/core': false
+  cpu-features: false
+  protobufjs: false
+  ssh2: false
+  msgpackr-extract: false

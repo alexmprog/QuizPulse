@@ -1,0 +1,146 @@
+{
+  "packKey": "ru-general",
+  "language": "ru",
+  "title": "Всё обо всём",
+  "settings": {
+    "advanceMode": "manual",
+    "autoAdvanceSeconds": 8,
+    "defaultTimeLimitSeconds": 20,
+    "earlyClose": true,
+    "leaderboardEvery": 5
+  },
+  "questions": [
+    {
+      "type": "single_choice",
+      "text": "Какой город является столицей Канады?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Оттава", "Торонто", "Монреаль", "Ванкувер"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Кит — это рыба.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Кто автор романа «Война и мир»?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Фёдор Достоевский", "Иван Тургенев", "Лев Толстой", "Антон Чехов"],
+      "correctOption": 2,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "Сколько клавиш на стандартном фортепиано?",
+      "imageId": null,
+      "timeLimitSeconds": 30,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 88,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Какое озеро считается самым глубоким в мире?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Ладожское", "Байкал", "Виктория", "Онежское"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "На уровне моря вода закипает при 100 °C.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Какой химический символ у натрия?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Na", "N", "Ne", "Sn"],
+      "correctOption": 0,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "В каком году Юрий Гагарин впервые полетел в космос?",
+      "imageId": null,
+      "timeLimitSeconds": 25,
+      "multiplier": 2,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 1961,
+      "numericTolerance": 0
+    },
+    {
+      "type": "single_choice",
+      "text": "Какая планета ближе всего к Солнцу?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": ["Венера", "Марс", "Земля", "Меркурий"],
+      "correctOption": 3,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "true_false",
+      "text": "Москва расположена на реке Нева.",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 1,
+      "options": [],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "single_choice",
+      "text": "Какой океан самый маленький по площади?",
+      "imageId": null,
+      "timeLimitSeconds": null,
+      "multiplier": 2,
+      "options": ["Атлантический", "Северный Ледовитый", "Индийский", "Тихий"],
+      "correctOption": 1,
+      "numericAnswer": null,
+      "numericTolerance": null
+    },
+    {
+      "type": "numeric",
+      "text": "Сколько секунд в одном часе?",
+      "imageId": null,
+      "timeLimitSeconds": 30,
+      "multiplier": 3,
+      "options": [],
+      "correctOption": null,
+      "numericAnswer": 3600,
+      "numericTolerance": 0
+    }
+  ]
+}
